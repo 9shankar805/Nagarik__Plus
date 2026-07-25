@@ -58,7 +58,7 @@ class _TutorialsScreenState extends State<TutorialsScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF2F5FA),
       body: NestedScrollView(
-        headerSliverBuilder: (_, __) => [_buildSliverHeader()],
+        headerSliverBuilder: (_, _) => [_buildSliverHeader()],
         body: Column(
           children: [
             _buildStatsCard(context),
@@ -96,32 +96,32 @@ class _TutorialsScreenState extends State<TutorialsScreen>
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 16,
               offset: const Offset(0, 4)),
         ],
       ),
       child: Row(
         children: [
-          _StatCell(Icons.menu_book_rounded,    '500+', context.l10n.questions, AppColors.primary),
+          _statCell(Icons.menu_book_rounded,    '500+', context.l10n.questions, AppColors.primary),
           _vDivider(),
-          _StatCell(Icons.play_circle_rounded,  '50+',  context.l10n.tutorials, const Color(0xFFF57F17)),
+          _statCell(Icons.play_circle_rounded,  '50+',  context.l10n.tutorials, const Color(0xFFF57F17)),
           _vDivider(),
-          _StatCell(Icons.assignment_rounded,   '20+',  context.l10n.mockTests, AppColors.secondary),
+          _statCell(Icons.assignment_rounded,   '20+',  context.l10n.mockTests, AppColors.secondary),
           _vDivider(),
-          _StatCell(Icons.subject_rounded,      '4',    context.l10n.subjects,  const Color(0xFF7B1FA2)),
+          _statCell(Icons.subject_rounded,      '4',    context.l10n.subjects,  const Color(0xFF7B1FA2)),
         ],
       ),
     );
   }
 
-  Widget _StatCell(IconData icon, String val, String label, Color color) {
+  Widget _statCell(IconData icon, String val, String label, Color color) {
     return Expanded(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
           width: 34, height: 34,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.10),
+            color: color.withValues(alpha: 0.10),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: color, size: 18),
@@ -302,7 +302,7 @@ class _TutorialsScreenState extends State<TutorialsScreen>
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
+                color: Colors.white.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.emoji_events_rounded,
@@ -378,7 +378,7 @@ class _FeaturedCourseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 12,
                 offset: const Offset(0, 4)),
           ],
@@ -389,7 +389,7 @@ class _FeaturedCourseCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: course.color.withOpacity(0.12),
+              color: course.color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(course.icon, color: course.color, size: 26),
@@ -426,7 +426,7 @@ class _FeaturedCourseCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: course.progress,
                       minHeight: 5,
-                      backgroundColor: course.color.withOpacity(0.12),
+                      backgroundColor: course.color.withValues(alpha: 0.12),
                       valueColor: AlwaysStoppedAnimation(course.color),
                     ),
                   )),
@@ -474,7 +474,7 @@ class _CourseGridCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2)),
           ],
@@ -486,7 +486,7 @@ class _CourseGridCard extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: course.color.withOpacity(0.12),
+                color: course.color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(course.icon, color: course.color, size: 20),
@@ -503,7 +503,7 @@ class _CourseGridCard extends StatelessWidget {
             Text(course.lessons,
                 style: TextStyle(
                     fontSize: 9.5,
-                    color: course.color.withOpacity(0.8),
+                    color: course.color.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
             ClipRRect(
@@ -511,7 +511,7 @@ class _CourseGridCard extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: course.progress,
                 minHeight: 3,
-                backgroundColor: course.color.withOpacity(0.12),
+                backgroundColor: course.color.withValues(alpha: 0.12),
                 valueColor: AlwaysStoppedAnimation(course.color),
               ),
             ),
@@ -540,7 +540,7 @@ class _QuizCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2)),
           ],
@@ -550,7 +550,7 @@ class _QuizCard extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: quiz.color.withOpacity(0.12),
+              color: quiz.color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(quiz.icon, color: quiz.color, size: 22),
@@ -575,7 +575,7 @@ class _QuizCard extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
               color: quiz.hasProgress
-                  ? AppColors.secondary.withOpacity(0.12)
+                  ? AppColors.secondary.withValues(alpha: 0.12)
                   : AppColors.primary,
               borderRadius: BorderRadius.circular(20),
             ),
@@ -658,10 +658,10 @@ class _TutorialsHeaderDelegate extends SliverPersistentHeaderDelegate {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(20),
                     border:
-                        Border.all(color: Colors.white.withOpacity(0.3)),
+                        Border.all(color: Colors.white.withValues(alpha: 0.3)),
                   ),
                   child: const Row(mainAxisSize: MainAxisSize.min, children: [
                     Icon(Icons.school_rounded,
@@ -685,7 +685,7 @@ class _TutorialsHeaderDelegate extends SliverPersistentHeaderDelegate {
                       letterSpacing: -0.5,
                       shadows: [
                         Shadow(
-                            color: Colors.black.withOpacity(0.7),
+                            color: Colors.black.withValues(alpha: 0.7),
                             blurRadius: 10),
                       ]),
                 ),
@@ -694,9 +694,9 @@ class _TutorialsHeaderDelegate extends SliverPersistentHeaderDelegate {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.25)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
                   ),
                   child: Text(
                     context.l10n.learnCenterSubtitle,
@@ -718,7 +718,7 @@ class _TutorialsHeaderDelegate extends SliverPersistentHeaderDelegate {
           bottom: 0,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withValues(alpha: 0.25),
             ),
             child: TabBar(
               controller: tab,

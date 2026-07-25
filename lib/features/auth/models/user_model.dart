@@ -8,6 +8,7 @@ class User {
   final String? dob;
   final String? address;
   final String? citizenshipNumber;
+  final String? loginProvider;
   final bool pinSet;
   final bool biometricEnabled;
   final DateTime? createdAt;
@@ -23,6 +24,7 @@ class User {
     this.dob,
     this.address,
     this.citizenshipNumber,
+    this.loginProvider,
     required this.pinSet,
     this.biometricEnabled = false,
     this.createdAt,
@@ -39,6 +41,7 @@ class User {
     String? dob,
     String? address,
     String? citizenshipNumber,
+    String? loginProvider,
     bool? pinSet,
     bool? biometricEnabled,
     DateTime? createdAt,
@@ -54,6 +57,7 @@ class User {
       dob: dob ?? this.dob,
       address: address ?? this.address,
       citizenshipNumber: citizenshipNumber ?? this.citizenshipNumber,
+      loginProvider: loginProvider ?? this.loginProvider,
       pinSet: pinSet ?? this.pinSet,
       biometricEnabled: biometricEnabled ?? this.biometricEnabled,
       createdAt: createdAt ?? this.createdAt,
@@ -72,6 +76,7 @@ class User {
       dob: json['dob'] as String?,
       address: json['address'] as String?,
       citizenshipNumber: json['citizenship_number'] as String?,
+      loginProvider: json['login_provider'] as String?,
       pinSet: json['pin_set'] as bool? ?? false,
       biometricEnabled: json['biometric_enabled'] as bool? ?? false,
       createdAt: json['created_at'] != null
@@ -92,6 +97,7 @@ class User {
       'dob': dob,
       'address': address,
       'citizenship_number': citizenshipNumber,
+      'login_provider': loginProvider,
       'pin_set': pinSet,
       'biometric_enabled': biometricEnabled,
       'created_at': createdAt?.toIso8601String(),

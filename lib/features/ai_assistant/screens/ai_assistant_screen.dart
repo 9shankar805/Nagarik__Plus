@@ -16,6 +16,38 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
   final List<_Message> _messages = [];
   bool _isTyping = false;
 
+  static const List<String> _suggestions = [
+    'How to apply for a passport?',
+    'Driving license requirements',
+    'PAN card registration',
+    'National ID card help',
+    'Citizenship certificate',
+    'Tax filing information',
+    'Voter ID registration',
+    'Birth certificate process',
+  ];
+
+  static const Map<String, String> _responses = {
+    'passport':
+        '📘 **Passport Application (Nepal):**\n\n• Requirements: Citizenship, Birth certificate, 2 PP photos, Rs. 5,000 fee\n• Apply online at: dop.gov.np (e-passport portal)\n• Visit District Administration Office (DAO) for biometrics\n• Processing: ~15–30 working days\n• Enquiry: 01-4416000\n\nWould you like step-by-step instructions?',
+    'driving':
+        '🚗 **Driving License (Nepal):**\n\n• Categories: A (2-wheeler), B (car), C (truck), etc.\n• Process: Written test → Trial → Medical → License\n• Fee: ~Rs. 1,500–2,500 depending on category\n• Apply at: Department of Transport Management (dotm.gov.np)\n• Required: Citizenship, Medical form, Photos\n• Validity: 5 years (renewable)\n\nNeed help with a specific step?',
+    'pan':
+        '💳 **PAN Card Registration:**\n\n• PAN = Permanent Account Number (tax ID)\n• Apply online at: ird.gov.np → Taxpayer Portal\n• Required: Citizenship, Photo, Phone number\n• Fee: Free (Rs. 0)\n• Processing: Same day to 3 days\n• Mandatory for: Business, Salary > Rs. 400K/year, Property transactions\n\nNeed the step-by-step online form guide?',
+    'national id':
+        '🆔 **National ID Card (NID):**\n\n• Issued by: Dept. of National ID & Civil Registration (nid.gov.np)\n• Required: Citizenship certificate, Birth cert, 1 photo, Biometrics\n• Age: 16+ years\n• Process: Visit nearest NID center → Form → Biometrics → Collect\n• Fee: Rs. 200 (first time)\n• Used for: Voter ID, Banking, Government services, SIM registration\n\nWant to find your nearest NID center?',
+    'citizenship':
+        '🏛️ **Citizenship Certificate:**\n\n• Types: By descent, By birth, Naturalization\n• By descent: One/both parents Nepali → Apply at DAO\n• Required: Parents\' citizenship, Birth cert, SEE cert, Photos\n• Fee: ~Rs. 100–500\n• Processing: 7–30 days\n• Also: Ward recommendation letter\n\nNeed the complete document checklist?',
+    'tax':
+        '💰 **Income Tax Filing (Nepal):**\n\n• Due date: As per IRD calendar (usually end of Ashadh)\n• Portal: ird.gov.np → Taxpayer Login\n• Slabs (Individual): Up to 5L: 1% · 5L–10L: 10% · 10L–20L: 20% · 20L+: 30%\n• Need: PAN, Income details, Deductions (insurance, PF)\n• Late fee: Rs. 1,000 + interest\n\nWant me to walk you through e-filing?',
+    'voter':
+        '🗳️ **Voter ID Registration:**\n\n• Age: 18+ years (by election date)\n• Required: Citizenship, Age proof, Residence proof\n• Process:\n  1. Visit election.gov.np or nearest ward office\n  2. Fill Voter Registration Form (Form 11)\n  3. Submit documents + photo\n  4. Verification → Published in voter list\n• Check status: election.gov.np/voter-search\n• EC Hotline: 1064\n\nWant help checking if you\'re registered?',
+    'birth':
+        '👶 **Birth Certificate Registration:**\n\n• Timeline: Within 35 days (free); After = late fee\n• Required: Hospital slip + Parents\' citizenship + Marriage cert\n• Process: Get form from hospital/ward → Submit to Local Level → Verification → Certificate\n• Online: crs.dcr.gov.np (Civil Registration System)\n• Fee: Free (on time); Rs. 100–500 (late)\n• Mandatory for: Citizenship, School, Passport\n\nNeed marriage or death certificate info?',
+    'marriage':
+        '💍 **Marriage Certificate Registration:**\n\n• Required: Both citizenship + 2 witnesses + Photo + Rs. 100 fee\n• Age: Bride ≥20, Groom ≥20\n• Process: Apply at District Court or Ward → Verification → Certificate\n• Online: crs.dcr.gov.np\n• Processing: Same day to 1 week\n• Needed for: Passport, Visa, Joint accounts, Legal rights\n\nWant help with the application form?',
+  };
+
   @override
   void initState() {
     super.initState();
@@ -141,10 +173,10 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.08),
+                      color: AppColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: AppColors.primary.withOpacity(0.2)),
+                          color: AppColors.primary.withValues(alpha: 0.2)),
                     ),
                     child: Text(
                       _suggestions[index],
@@ -180,7 +212,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 10,
                     offset: const Offset(0, -4))
               ],
@@ -257,7 +289,7 @@ class _MessageBubble extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 6,
                 offset: const Offset(0, 2))
           ],
@@ -332,7 +364,7 @@ class _TypingIndicatorState extends State<_TypingIndicator>
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.06), blurRadius: 6)
+                color: Colors.black.withValues(alpha: 0.06), blurRadius: 6)
           ],
         ),
         child: Row(
@@ -341,13 +373,13 @@ class _TypingIndicatorState extends State<_TypingIndicator>
             3,
             (i) => AnimatedBuilder(
               animation: _animations[i],
-              builder: (_, __) => Container(
+              builder: (_, _) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 2),
                 width: 8,
                 height: 8 + _animations[i].value * 6,
                 decoration: BoxDecoration(
                   color: AppColors.primary
-                      .withOpacity(0.4 + _animations[i].value * 0.6),
+                      .withValues(alpha: 0.4 + _animations[i].value * 0.6),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),

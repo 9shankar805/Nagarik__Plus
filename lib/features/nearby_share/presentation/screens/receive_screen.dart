@@ -24,11 +24,11 @@ class _ReceiveScreenState extends State<ReceiveScreen>
 
   _ReceivePhase _phase = _ReceivePhase.permissions;
   String _status       = '';
-  String _peerName     = 'Sender';
+  final String _peerName     = 'Sender';
   int    _serverPort   = 8888;
   String _localIp      = '';
 
-  List<TransferFileModel> _received = [];
+  final List<TransferFileModel> _received = [];
   StreamSubscription? _stateSub, _progressSub;
   late AnimationController _pulse;
 
@@ -54,8 +54,11 @@ class _ReceiveScreenState extends State<ReceiveScreen>
       if (!mounted) return;
       setState(() {
         final idx = _received.indexWhere((f) => f.id == file.id);
-        if (idx == -1) _received.add(file);
-        else           _received[idx] = file;
+        if (idx == -1) {
+          _received.add(file);
+        } else {
+          _received[idx] = file;
+        }
         _phase = _ReceivePhase.receiving;
       });
     });
@@ -84,6 +87,11 @@ class _ReceiveScreenState extends State<ReceiveScreen>
   }
 
   Future<bool> _requestPermissions() async {
+    if (Platform.isIOS) {
+      // iOS permissions are handled via Info.plist - always return true
+      return true;
+    }
+
     int sdk = 0;
     if (Platform.isAndroid) {
       sdk = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
@@ -93,8 +101,11 @@ class _ReceiveScreenState extends State<ReceiveScreen>
       Permission.bluetoothScan,
       Permission.bluetoothConnect,
     ];
-    if (sdk >= 33) perms.add(Permission.nearbyWifiDevices);
-    else           perms.add(Permission.storage);
+    if (sdk >= 33) {
+      perms.add(Permission.nearbyWifiDevices);
+    } else {
+      perms.add(Permission.storage);
+    }
     final results = await perms.request();
     return results.values.every((s) => s.isGranted || s.isLimited);
   }
@@ -164,7 +175,7 @@ class _ReceiveScreenState extends State<ReceiveScreen>
     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       AnimatedBuilder(
         animation: _pulse,
-        builder: (_, __) => Stack(alignment: Alignment.center, children: [
+        builder: (_, _) => Stack(alignment: Alignment.center, children: [
           ...List.generate(3, (i) => Opacity(
             opacity: (1 - _pulse.value) * (1 - i * 0.25),
             child: Transform.scale(
@@ -173,7 +184,7 @@ class _ReceiveScreenState extends State<ReceiveScreen>
                 width: 150, height: 150,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _kGreen.withOpacity(0.08),
+                  color: _kGreen.withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -227,9 +238,9 @@ class _ReceiveScreenState extends State<ReceiveScreen>
         margin: const EdgeInsets.all(14),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: _kGreen.withOpacity(0.08),
+          color: _kGreen.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: _kGreen.withOpacity(0.2)),
+          border: Border.all(color: _kGreen.withValues(alpha: 0.2)),
         ),
         child: Row(children: [
           const Icon(Icons.download_rounded, color: _kGreen, size: 22),

@@ -6,32 +6,30 @@ import '../models/citizen_service.dart';
 class ServicesRepository {
   final CitizenServiceApi _apiService;
   final Box<CitizenService>? _servicesBox;
-  final Box<ServiceOffice>? _officesBox;
 
   ServicesRepository({
     CitizenServiceApi? apiService,
     Box<CitizenService>? servicesBox,
-    Box<ServiceOffice>? officesBox,
+    Box<ServiceOffice>? officesBox, // reserved for future use
   })  : _apiService = apiService ?? CitizenServiceApi(),
-        _servicesBox = servicesBox,
-        _officesBox = officesBox;
+        _servicesBox = servicesBox;
 
   Future<List<CitizenService>> getServices({bool forceRefresh = false}) async {
-    if (!forceRefresh && _servicesBox != null && _servicesBox!.isNotEmpty) {
-      return _servicesBox!.values.toList();
+    if (!forceRefresh && _servicesBox != null && _servicesBox.isNotEmpty) {
+      return _servicesBox.values.toList();
     }
 
     try {
       final response = await _apiService.getServices();
       final services = response.data ?? [];
       if (_servicesBox != null) {
-        await _servicesBox!.clear();
-        await _servicesBox!.addAll(services);
+        await _servicesBox.clear();
+        await _servicesBox.addAll(services);
       }
       return services;
     } catch (e) {
-      if (_servicesBox != null && _servicesBox!.isNotEmpty) {
-        return _servicesBox!.values.toList();
+      if (_servicesBox != null && _servicesBox.isNotEmpty) {
+        return _servicesBox.values.toList();
       }
       rethrow;
     }

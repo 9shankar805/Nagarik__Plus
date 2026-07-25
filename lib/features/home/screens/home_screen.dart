@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nagarik_plus/core/l10n/l10n_extension.dart';
 import 'package:provider/provider.dart';
-import '../../../core/widgets/language_switcher.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_routes.dart';
-import '../../documents/models/document_model.dart';
 import '../../documents/providers/documents_provider.dart';
 import '../../documents/screens/document_detail_screen.dart';
-import '../../documents/screens/documents_screen.dart';
-import '../../emergency/screens/emergency_screen.dart';
-import '../../news/models/news_article.dart';
 import '../../news/providers/news_provider.dart';
 import '../../news/screens/news_screen.dart';
 import '../../office_locator/screens/office_locator_screen.dart';
-import '../../reminders/screens/reminders_screen.dart';
 import '../../notifications/screens/notifications_screen.dart';
 import '../../notifications/providers/notification_provider.dart';
 import '../../nearby_share/presentation/screens/share_home_screen.dart';
 import '../../advisors/screens/advisors_list_screen.dart';
 import '../models/banner_model.dart';
-import '../models/social_service_model.dart';
-import '../models/vital_event_model.dart';
 import '../providers/home_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -295,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.12),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.support_agent_rounded, color: AppColors.primary, size: 22),
@@ -364,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
+                    color: Colors.black.withValues(alpha: 0.15),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -403,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
+                                color: Colors.white.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: const Text('eSewa / Khalti Paid', style: TextStyle(color: Colors.white70, fontSize: 10)),
@@ -412,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
+                                color: Colors.white.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: const Text('Instant Pass', style: TextStyle(color: Color(0xFF4ADE80), fontSize: 10, fontWeight: FontWeight.bold)),
@@ -463,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
               doc.title,
               AppAssets.nationalId,
               const Color(0xFFE3F0FF),
-              doc.type ?? 'other',
+              doc.type,
             ),
           );
           return _DocItem(doc.title, matched.imagePath, matched.bgColor, matched.typeId);
@@ -500,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          if (docsProvider.expiringDocuments.isNotEmpty)
+          if (documentsProvider.expiringDocuments.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: GestureDetector(
@@ -508,9 +500,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withOpacity(0.08),
+                    color: AppColors.danger.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.danger.withOpacity(0.2)),
+                    border: Border.all(color: AppColors.danger.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     children: [
@@ -521,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${docsProvider.expiringDocuments.length} Document(s) Expiring Soon',
+                              '${documentsProvider.expiringDocuments.length} Document(s) Expiring Soon',
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
@@ -529,7 +521,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              'Renew ${docsProvider.expiringDocuments.first.title} to avoid service interruptions.',
+                              'Renew ${documentsProvider.expiringDocuments.first.title} to avoid service interruptions.',
                               style: const TextStyle(fontSize: 11, color: AppColors.textMedium),
                             ),
                           ],
@@ -565,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: const Color(0xFFF0F5FF),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.25),
+                              color: AppColors.primary.withValues(alpha: 0.25),
                               width: 1.5,
                             ),
                           ),
@@ -600,7 +592,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.07),
+                              color: Colors.black.withValues(alpha: 0.07),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -613,14 +605,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.all(6),
                                   child: Image.asset(d.imagePath,
                                       fit: BoxFit.contain,
-                                      errorBuilder: (_, __, ___) => const Icon(
+                                      errorBuilder: (_, _, _) => const Icon(
                                           Icons.insert_drive_file_outlined,
                                           size: 32,
                                           color: AppColors.textMedium)),
                                 )
                               : Image.asset(d.imagePath,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Container(
+                                  errorBuilder: (_, _, _) => Container(
                                       color: d.bgColor,
                                       child: const Icon(
                                           Icons.insert_drive_file_outlined,
@@ -720,11 +712,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   border: Border.all(
                                       color: (s.color != null 
                                               ? Color(int.parse(s.color!.replaceFirst('#', '0xFF'))) 
-                                              : AppColors.primary).withOpacity(0.15),
+                                              : AppColors.primary).withValues(alpha: 0.15),
                                       width: 1.5),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.06),
+                                      color: Colors.black.withValues(alpha: 0.06),
                                       blurRadius: 6,
                                       offset: const Offset(0, 2),
                                     ),
@@ -734,7 +726,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: s.imageUrl != null
                                       ? Image.network(s.imageUrl!,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => Icon(
+                                          errorBuilder: (_, _, _) => Icon(
                                               Icons.settings_rounded,
                                               color: s.color != null 
                                                   ? Color(int.parse(s.color!.replaceFirst('#', '0xFF'))) 
@@ -770,7 +762,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 28,
                                 height: 28,
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.08),
+                                  color: AppColors.primary.withValues(alpha: 0.08),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(Icons.arrow_forward_ios_rounded,
@@ -804,11 +796,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: s.bgColor,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: s.iconColor.withOpacity(0.15),
+                                      color: s.iconColor.withValues(alpha: 0.15),
                                       width: 1.5),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.06),
+                                      color: Colors.black.withValues(alpha: 0.06),
                                       blurRadius: 6,
                                       offset: const Offset(0, 2),
                                     ),
@@ -818,7 +810,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: s.hasImage
                                       ? Image.asset(s.imagePath,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => Icon(
+                                          errorBuilder: (_, _, _) => Icon(
                                               s.fallbackIcon,
                                               color: s.iconColor,
                                               size: 26))
@@ -850,7 +842,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 28,
                                 height: 28,
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.08),
+                                  color: AppColors.primary.withValues(alpha: 0.08),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(Icons.arrow_forward_ios_rounded,
@@ -924,7 +916,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.07),
+                                  color: Colors.black.withValues(alpha: 0.07),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -938,7 +930,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ? Image.network(
                                         e.imageUrl!,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (_, __, ___) => const Icon(
+                                        errorBuilder: (_, _, _) => const Icon(
                                           Icons.description_outlined,
                                           size: 30,
                                           color: AppColors.textMedium,
@@ -984,7 +976,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.07),
+                                  color: Colors.black.withValues(alpha: 0.07),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -997,7 +989,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Image.asset(
                                   e.imagePath,
                                   fit: BoxFit.contain,
-                                  errorBuilder: (_, __, ___) => const Icon(
+                                  errorBuilder: (_, _, _) => const Icon(
                                     Icons.description_outlined,
                                     size: 30,
                                     color: AppColors.textMedium,
@@ -1083,7 +1075,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withOpacity(0.07),
+                              color: Colors.black.withValues(alpha: 0.07),
                               blurRadius: 8,
                               offset: const Offset(0, 2))
                         ],
@@ -1093,7 +1085,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Image.asset(
                           s.imagePath,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
+                          errorBuilder: (_, _, _) =>
                               Icon(s.fallbackIcon, color: s.iconColor, size: 28),
                         ),
                       ),
@@ -1144,10 +1136,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ? newsArticles.map((article) {
           // Map NewsArticle to _NewsSnippet, use article's title, source, time if available, else fallback
           final title = isNepali 
-              ? (article.titleNp ?? article.title ?? 'News Item') 
-              : (article.title ?? 'News Item');
+              ? (article.titleNp ?? article.title) 
+              : article.title;
           final source = article.source ?? (isNepali ? 'स्रोत' : 'Source');
-          final time = article.publishedAt ?? (isNepali ? 'हालै' : 'Just now');
+          final time = article.publishedAt != null
+              ? _formatRelativeTime(article.publishedAt!, isNepali)
+              : (isNepali ? 'हालै' : 'Just now');
           return _NewsSnippet(title, source, time);
         }).toList() 
       : fallbackItems;
@@ -1193,7 +1187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     border: Border.all(color: AppColors.divider),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 4,
                           offset: const Offset(0, 1))
                     ],
@@ -1242,7 +1236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-              )).toList(),
+              )),
         ],
       ),
     );
@@ -1285,6 +1279,40 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _openDocument(BuildContext context, String typeId) {
+    final docs = context.read<DocumentsProvider>().documents;
+    final match = docs.where(
+      (d) => d.type == typeId || d.id.toString() == typeId,
+    );
+    if (match.isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => DocumentDetailScreen(document: match.first),
+        ),
+      );
+    } else {
+      Navigator.of(context).pushNamed(AppRoutes.documents);
+    }
+  }
+
+  String _formatRelativeTime(DateTime dt, bool isNepali) {
+    final now = DateTime.now();
+    final diff = now.difference(dt);
+    if (diff.inMinutes < 1) {
+      return isNepali ? 'हालै' : 'Just now';
+    } else if (diff.inMinutes < 60) {
+      return isNepali ? '${diff.inMinutes} मिनेट अघि' : '${diff.inMinutes}m ago';
+    } else if (diff.inHours < 24) {
+      return isNepali ? '${diff.inHours} घण्टा अघि' : '${diff.inHours}h ago';
+    } else if (diff.inDays < 7) {
+      return isNepali ? '${diff.inDays} दिन अघि' : '${diff.inDays}d ago';
+    } else {
+      final m = dt.month.toString().padLeft(2, '0');
+      final d = dt.day.toString().padLeft(2, '0');
+      return '${dt.year}-$m-$d';
+    }
   }
 }
 
@@ -1364,7 +1392,7 @@ class _ChipData {
 // ── Rich banner card widget ───────────────────────────────────────────────────
 class _BannerCard extends StatelessWidget {
   final _BannerData data;
-  const _BannerCard({super.key, required this.data});
+  const _BannerCard({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -1379,7 +1407,7 @@ class _BannerCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: data.gradient.last.withOpacity(0.35),
+            color: data.gradient.last.withValues(alpha: 0.35),
             blurRadius: 14,
             offset: const Offset(0, 5),
           ),
@@ -1401,7 +1429,7 @@ class _BannerCard extends StatelessWidget {
                 child: Image.asset(
                   data.assetBg,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox(),
+                  errorBuilder: (_, _, _) => const SizedBox(),
                 ),
               ),
             ),
@@ -1414,7 +1442,7 @@ class _BannerCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.18),
+                color: Colors.white.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -1432,7 +1460,7 @@ class _BannerCard extends StatelessWidget {
                       child: Image.asset(
                         AppAssets.appIcon,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const SizedBox(),
+                        errorBuilder: (_, _, _) => const SizedBox(),
                       ),
                     ),
                   ),
@@ -1475,7 +1503,7 @@ class _BannerCard extends StatelessWidget {
                 Text(
                   data.subtitleNp,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.80),
+                    color: Colors.white.withValues(alpha: 0.80),
                     fontSize: 10,
                     height: 1.4,
                   ),
@@ -1491,7 +1519,7 @@ class _BannerCard extends StatelessWidget {
 
 class _ApiBannerCard extends StatelessWidget {
   final BannerModel banner;
-  const _ApiBannerCard({super.key, required this.banner});
+  const _ApiBannerCard({required this.banner});
 
   @override
   Widget build(BuildContext context) {
@@ -1507,7 +1535,7 @@ class _ApiBannerCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF388E3C).withOpacity(0.35),
+            color: const Color(0xFF388E3C).withValues(alpha: 0.35),
             blurRadius: 14,
             offset: const Offset(0, 5),
           ),
@@ -1524,7 +1552,7 @@ class _ApiBannerCard extends StatelessWidget {
                   child: Image.network(
                     banner.imageUrl!,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const SizedBox(),
+                    errorBuilder: (_, _, _) => const SizedBox(),
                   ),
                 ),
               ),
@@ -1536,7 +1564,7 @@ class _ApiBannerCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.18),
+                color: Colors.white.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -1554,7 +1582,7 @@ class _ApiBannerCard extends StatelessWidget {
                       child: Image.asset(
                         AppAssets.appIcon,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const SizedBox(),
+                        errorBuilder: (_, _, _) => const SizedBox(),
                       ),
                     ),
                   ),
@@ -1595,7 +1623,7 @@ class _ApiBannerCard extends StatelessWidget {
                   Text(
                     banner.description!,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.80),
+                      color: Colors.white.withValues(alpha: 0.80),
                       fontSize: 10,
                       height: 1.4,
                     ),
@@ -1609,34 +1637,3 @@ class _ApiBannerCard extends StatelessWidget {
   }
 }
 
-class _FeatureChip extends StatelessWidget {
-  final _ChipData chip;
-  const _FeatureChip({required this.chip});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(chip.icon, color: Colors.white, size: 10),
-          const SizedBox(width: 3),
-          Text(
-            chip.label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 9.5,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

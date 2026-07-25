@@ -13,7 +13,7 @@ class NewsProvider extends ChangeNotifier {
   List<NewsArticle> _articles = [];
   List<NewsArticle> _bookmarkedArticles = [];
   List<NewsCategory> _categories = [];
-  Map<int, List<NewsComment>> _commentsMap = {};
+  final Map<int, List<NewsComment>> _commentsMap = {};
   String? _errorMessage;
 
   NewsStatus get status => _status;

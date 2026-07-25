@@ -26,11 +26,11 @@ class NewsRepository {
   }) async {
     if (!forceRefresh &&
         _articlesBox != null &&
-        _articlesBox!.isNotEmpty &&
+        _articlesBox.isNotEmpty &&
         category == null &&
         search == null &&
         featured == null) {
-      return _articlesBox!.values.toList();
+      return _articlesBox.values.toList();
     }
 
     try {
@@ -42,38 +42,38 @@ class NewsRepository {
       );
       final articles = response.data ?? [];
       if (_articlesBox != null && category == null && search == null && featured == null) {
-        await _articlesBox!.clear();
-        await _articlesBox!.addAll(articles);
+        await _articlesBox.clear();
+        await _articlesBox.addAll(articles);
       }
       return articles;
     } catch (e) {
       if (_articlesBox != null &&
-          _articlesBox!.isNotEmpty &&
+          _articlesBox.isNotEmpty &&
           category == null &&
           search == null &&
           featured == null) {
-        return _articlesBox!.values.toList();
+        return _articlesBox.values.toList();
       }
       rethrow;
     }
   }
 
   Future<List<NewsCategory>> getCategories({bool forceRefresh = false}) async {
-    if (!forceRefresh && _categoriesBox != null && _categoriesBox!.isNotEmpty) {
-      return _categoriesBox!.values.toList();
+    if (!forceRefresh && _categoriesBox != null && _categoriesBox.isNotEmpty) {
+      return _categoriesBox.values.toList();
     }
 
     try {
       final response = await _apiService.getCategories();
       final categories = response.data ?? [];
       if (_categoriesBox != null) {
-        await _categoriesBox!.clear();
-        await _categoriesBox!.addAll(categories);
+        await _categoriesBox.clear();
+        await _categoriesBox.addAll(categories);
       }
       return categories;
     } catch (e) {
-      if (_categoriesBox != null && _categoriesBox!.isNotEmpty) {
-        return _categoriesBox!.values.toList();
+      if (_categoriesBox != null && _categoriesBox.isNotEmpty) {
+        return _categoriesBox.values.toList();
       }
       rethrow;
     }

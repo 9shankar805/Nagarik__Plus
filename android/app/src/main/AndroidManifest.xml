@@ -7,6 +7,10 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
 
+    <!-- ── Microphone (for calling) ── -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
     <!-- ── Storage (all Android versions) ── -->
     <!-- Android ≤12: legacy storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"

@@ -1,8 +1,13 @@
 
 class EnvConfig {
-  static const String baseUrl =
-      String.fromEnvironment('API_BASE_URL', defaultValue: 'http://10.0.2.2:8000/api/v1');
-  static const String baseUrlDev = 'http://10.0.2.2:8000/api/v1';
-  static const String baseUrlStaging = 'https://staging.nagarikplus.com/api/v1';
-  static const String baseUrlProd = 'https://api.nagarikplus.com/api/v1';
+  static const String _defaultUrl = 'https://nagarikplus.techprocod.com.np/api/v1/';
+
+  static String get baseUrl =>
+      const String.fromEnvironment('API_BASE_URL', defaultValue: '').isNotEmpty
+          ? const String.fromEnvironment('API_BASE_URL')
+          : _defaultUrl;
+
+  static const String baseUrlDev = _defaultUrl;
+  static const String baseUrlStaging = _defaultUrl;
+  static const String baseUrlProd = _defaultUrl;
 }

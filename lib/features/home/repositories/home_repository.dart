@@ -10,15 +10,15 @@ class HomeRepository {
   HomeRepository({HomeApiService? apiService})
       : _apiService = apiService ?? HomeApiService();
 
-  Future&lt;List&lt;BannerModel&gt;&gt; getBanners() async {
+  Future<List<BannerModel>> getBanners() async {
     return await _apiService.getBanners();
   }
 
-  Future&lt;List&lt;SocialServiceModel&gt;&gt; getSocialServices() async {
+  Future<List<SocialServiceModel>> getSocialServices() async {
     return await _apiService.getSocialServices();
   }
 
-  Future&lt;List&lt;VitalEventModel&gt;&gt; getVitalEvents() async {
+  Future<List<VitalEventModel>> getVitalEvents() async {
     return await _apiService.getVitalEvents();
   }
 }

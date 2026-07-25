@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
-import '../models/reminder_model.dart';
 import '../providers/reminders_provider.dart';
 
 class RemindersScreen extends StatefulWidget {
@@ -166,10 +165,10 @@ class _RemindersScreenState extends State<RemindersScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.06),
+                  color: AppColors.primary.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                      color: AppColors.primary.withOpacity(0.3),
+                      color: AppColors.primary.withValues(alpha: 0.3),
                       width: 1.5),
                 ),
                 child: const Row(
@@ -284,7 +283,7 @@ class _ReminderCard extends StatelessWidget {
             : null,
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 6,
               offset: const Offset(0, 2))
         ],
@@ -295,7 +294,7 @@ class _ReminderCard extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: reminder.color.withOpacity(0.12),
+              color: reminder.color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(reminder.icon, color: reminder.color, size: 24),
@@ -321,7 +320,7 @@ class _ReminderCard extends StatelessWidget {
                             : isUrgent
                                 ? AppColors.warning
                                 : AppColors.secondary)
-                        .withOpacity(0.1),
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -344,7 +343,7 @@ class _ReminderCard extends StatelessWidget {
           ),
           Switch(
             value: reminder.isEnabled,
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
             onChanged: onToggle,
           ),
         ],
@@ -372,9 +371,9 @@ class _SummaryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Column(
           children: [
@@ -387,7 +386,7 @@ class _SummaryCard extends StatelessWidget {
                     fontWeight: FontWeight.w800)),
             Text(label,
                 style: TextStyle(
-                    color: color.withOpacity(0.8),
+                    color: color.withValues(alpha: 0.8),
                     fontSize: 11,
                     fontWeight: FontWeight.w600)),
           ],

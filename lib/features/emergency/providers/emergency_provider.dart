@@ -27,8 +27,8 @@ class EmergencyProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final data = await _repository.getEmergencyData(forceRefresh: forceRefresh);
-      _contacts = (data['contacts'] as List?)?.cast<EmergencyContact>() ?? [];
-      _hospitals = (data['hospitals'] as List?)?.cast<Hospital>() ?? [];
+      _contacts = (data['contacts'])?.cast<EmergencyContact>() ?? [];
+      _hospitals = (data['hospitals'])?.cast<Hospital>() ?? [];
       _status = EmergencyStatus.loaded;
     } catch (e) {
       _errorMessage = e.toString();

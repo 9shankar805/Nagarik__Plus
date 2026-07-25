@@ -279,7 +279,7 @@ class _ScannerAnimationState extends State<_ScannerAnimation>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _anim,
-      builder: (_, __) {
+      builder: (_, _) {
         return SizedBox(
           width: 160,
           height: 120,

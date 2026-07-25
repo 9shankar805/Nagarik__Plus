@@ -22,12 +22,12 @@ class ConnectionBadge extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             color: light
-                ? Colors.white.withOpacity(0.2)
-                : color.withOpacity(0.1),
+                ? Colors.white.withValues(alpha: 0.2)
+                : color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
             border: light
-                ? Border.all(color: Colors.white.withOpacity(0.4))
-                : Border.all(color: color.withOpacity(0.3)),
+                ? Border.all(color: Colors.white.withValues(alpha: 0.4))
+                : Border.all(color: color.withValues(alpha: 0.3)),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Container(

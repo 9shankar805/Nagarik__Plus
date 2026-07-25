@@ -20,7 +20,7 @@ class SocialServiceModel {
     this.imageUrl,
   });
 
-  factory SocialServiceModel.fromJson(Map&lt;String, dynamic&gt; json) {
+  factory SocialServiceModel.fromJson(Map<String, dynamic> json) {
     return SocialServiceModel(
       id: json['id'],
       title: json['title'],

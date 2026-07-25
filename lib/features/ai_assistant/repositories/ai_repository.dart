@@ -24,21 +24,21 @@ class AiRepository {
   }
 
   Future<List<ChatMessage>> getHistory({bool forceRefresh = false}) async {
-    if (_chatHistoryBox != null && !forceRefresh && _chatHistoryBox!.isNotEmpty) {
-      return _chatHistoryBox!.values.toList();
+    if (_chatHistoryBox != null && !forceRefresh && _chatHistoryBox.isNotEmpty) {
+      return _chatHistoryBox.values.toList();
     }
 
     try {
       final response = await _apiService.getHistory();
       final history = response.data ?? [];
       if (_chatHistoryBox != null) {
-        await _chatHistoryBox!.clear();
-        await _chatHistoryBox!.addAll(history);
+        await _chatHistoryBox.clear();
+        await _chatHistoryBox.addAll(history);
       }
       return history;
     } catch (e) {
-      if (_chatHistoryBox != null && _chatHistoryBox!.isNotEmpty) {
-        return _chatHistoryBox!.values.toList();
+      if (_chatHistoryBox != null && _chatHistoryBox.isNotEmpty) {
+        return _chatHistoryBox.values.toList();
       }
       return [];
     }
@@ -48,7 +48,7 @@ class AiRepository {
     try {
       final response = await _apiService.sendMessage(message);
       if (_chatHistoryBox != null) {
-        await _chatHistoryBox!.add(response.data!);
+        await _chatHistoryBox.add(response.data!);
       }
       return response.data!;
     } catch (e) {

@@ -93,7 +93,7 @@ class AdvisorsListScreen extends StatelessWidget {
                                   hintStyle: const TextStyle(color: Colors.white60, fontSize: 13),
                                   prefixIcon: const Icon(Icons.search_rounded, color: Colors.white70),
                                   filled: true,
-                                  fillColor: Colors.white.withOpacity(0.18),
+                                  fillColor: Colors.white.withValues(alpha: 0.18),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(14),
                                     borderSide: BorderSide.none,
@@ -123,7 +123,7 @@ class AdvisorsListScreen extends StatelessWidget {
                                     child: Switch(
                                       value: advisorsProv.onlyOnline,
                                       onChanged: (_) => advisorsProv.toggleOnlyOnline(),
-                                      activeColor: AppColors.accent,
+                                      activeThumbColor: AppColors.accent,
                                       activeTrackColor: Colors.white30,
                                     ),
                                   ),
@@ -178,7 +178,7 @@ class AdvisorsListScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.green.withOpacity(0.3),
+                          color: Colors.green.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
@@ -308,10 +308,10 @@ class _CategoryChip extends StatelessWidget {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? color : color.withOpacity(0.08),
+          color: isSelected ? color : color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? color : color.withOpacity(0.2),
+            color: isSelected ? color : color.withValues(alpha: 0.2),
           ),
         ),
         child: Row(
@@ -354,7 +354,7 @@ class _AdvisorCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -379,7 +379,7 @@ class _AdvisorCard extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundColor: advisor.category.color.withOpacity(0.15),
+                          backgroundColor: advisor.category.color.withValues(alpha: 0.15),
                           backgroundImage: NetworkImage(advisor.avatarUrl),
                         ),
                         Positioned(

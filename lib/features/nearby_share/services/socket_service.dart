@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import '../data/models/transfer_file_model.dart';
@@ -53,8 +53,10 @@ class SocketService {
     _cancelled = false;
 
     try {
-      _server = await ServerSocket.bind(InternetAddress.anyIPv4, port)
-          .catchError((_) => ServerSocket.bind(InternetAddress.anyIPv4, 0));
+      // iOS uses different binding approach - use anyIPv6 fallback for iOS
+      final bindAddress = Platform.isIOS ? InternetAddress.anyIPv6 : InternetAddress.anyIPv4;
+      _server = await ServerSocket.bind(bindAddress, port)
+          .catchError((_) => ServerSocket.bind(bindAddress, 0));
       _listening = true;
 
       _server!.listen(
@@ -63,7 +65,8 @@ class SocketService {
         onDone:  () { _listening = false; },
       );
       return _server!.port;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('SocketService startServer error: $e');
       _listening = false;
       return 0;
     }
@@ -104,8 +107,13 @@ class SocketService {
       _sendFrame(socket, utf8.encode(ackJson));
 
       // 3. Prepare save location
-      final base    = await getExternalStorageDirectory() ??
-                      await getApplicationDocumentsDirectory();
+      Directory base;
+      if (Platform.isAndroid) {
+        base = await getExternalStorageDirectory() ??
+               await getApplicationDocumentsDirectory();
+      } else {
+        base = await getApplicationDocumentsDirectory();
+      }
       final destDir = Directory(p.join(base.path, 'NagarikShare'));
       await destDir.create(recursive: true);
 
@@ -166,7 +174,7 @@ class SocketService {
       fileInfo.status    = checksumOk ? TransferStatus.completed : TransferStatus.failed;
       onFileReceived(fileInfo, destPath, checksumOk);
     } catch (e, st) {
-      print('NagarikShare _handleClient error: $e\n$st');
+      debugPrint('NagarikShare _handleClient error: $e\n$st');
       socket.destroy();
     } finally {
       reader.dispose();
@@ -190,7 +198,7 @@ class SocketService {
       try {
         socket = await Socket.connect(receiverIp, port,
             timeout: const Duration(seconds: 3));
-        if (socket != null) break;
+        break;
       } catch (e) {
         if (attempt == 10) return false;
         await Future.delayed(const Duration(milliseconds: 1000));

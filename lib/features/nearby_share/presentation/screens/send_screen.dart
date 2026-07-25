@@ -77,7 +77,9 @@ class _SendScreenState extends State<SendScreen>
       setState(() {
         if (s == ShareConnectionState.searching) {
           _phase = _Phase.searching;
-          _status = 'Scanning for nearby devices via Wi-Fi Direct...';
+          _status = Platform.isIOS 
+              ? 'Scanning for nearby devices via Multipeer...' 
+              : 'Scanning for nearby devices via Wi-Fi Direct...';
         } else if (s == ShareConnectionState.connecting) {
           _phase = _Phase.connectingDirect;
           _status = 'Connecting...';
@@ -88,8 +90,14 @@ class _SendScreenState extends State<SendScreen>
           _phase = _Phase.failed;
           _status = 'Connection failed. Try again.';
         } else if (s == ShareConnectionState.wifiDirectUnavailable) {
-          // Automatically fall back to hotspot
-          _triggerHotspot();
+          // iOS doesn't have Wi-Fi Direct - use MultipeerConnectivity directly
+          if (Platform.isIOS) {
+            _phase = _Phase.searching;
+            _status = 'Scanning via MultipeerConnectivity...';
+          } else {
+            // Android: Automatically fall back to hotspot
+            _triggerHotspot();
+          }
         } else if (s == ShareConnectionState.hotspotActive) {
           // Hotspot is up — devices can join now; UDP discovery will find them
           _conn.discoverDevices(); // restart discovery over LAN/UDP
@@ -155,8 +163,11 @@ class _SendScreenState extends State<SendScreen>
       Permission.bluetoothAdvertise,
       Permission.bluetoothConnect,
     ];
-    if (sdk >= 33) perms.add(Permission.nearbyWifiDevices);
-    else           perms.add(Permission.storage);
+    if (sdk >= 33) {
+      perms.add(Permission.nearbyWifiDevices);
+    } else {
+      perms.add(Permission.storage);
+    }
     final results = await perms.request();
     return results.values.every((s) => s.isGranted || s.isLimited);
   }
@@ -337,9 +348,9 @@ class _SendScreenState extends State<SendScreen>
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [color.withOpacity(0.2), color.withOpacity(0.08)]),
+        gradient: LinearGradient(colors: [color.withValues(alpha: 0.2), color.withValues(alpha: 0.08)]),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: color.withOpacity(0.45)),
+        border: Border.all(color: color.withValues(alpha: 0.45)),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Icon(icon, color: color, size: 15),
@@ -375,7 +386,7 @@ class _SendScreenState extends State<SendScreen>
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           AnimatedBuilder(
             animation: _radar,
-            builder: (_, __) => Stack(alignment: Alignment.center, children: [
+            builder: (_, _) => Stack(alignment: Alignment.center, children: [
               ...List.generate(3, (i) => Transform.scale(
                 scale: 0.4 + (i * 0.3) + _radar.value * 0.3,
                 child: Container(
@@ -383,7 +394,7 @@ class _SendScreenState extends State<SendScreen>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: _kBlue.withOpacity((0.3 - i * 0.08).clamp(0.0, 1.0)),
+                        color: _kBlue.withValues(alpha: (0.3 - i * 0.08).clamp(0.0, 1.0)),
                         width: 1.5),
                   ),
                 ),
@@ -477,7 +488,7 @@ class _SendScreenState extends State<SendScreen>
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: _kBord),
                 boxShadow: [BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 16, offset: const Offset(0, 4),
                 )],
               ),
@@ -500,7 +511,7 @@ class _SendScreenState extends State<SendScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
-                    color: _kGreen.withOpacity(0.1),
+                    color: _kGreen.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Row(mainAxisSize: MainAxisSize.min, children: [
@@ -597,15 +608,15 @@ class _SendScreenState extends State<SendScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.25)),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
         boxShadow: [BoxShadow(
-            color: color.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 3))],
+            color: color.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 3))],
       ),
       child: Row(children: [
         Container(
           width: 44, height: 44,
           decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12)),
           child: Icon(icon, color: color, size: 22),
         ),
@@ -630,7 +641,7 @@ class _SendScreenState extends State<SendScreen>
             child: Container(
               width: 36, height: 36,
               decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10)),
               child: Icon(Icons.copy_rounded, color: color, size: 18),
             ),
@@ -668,7 +679,7 @@ class _SendScreenState extends State<SendScreen>
         Container(
           width: 80, height: 80,
           decoration: BoxDecoration(
-            color: (success ? const Color(0xFF10B981) : Colors.red).withOpacity(0.1),
+            color: (success ? const Color(0xFF10B981) : Colors.red).withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -720,7 +731,7 @@ class _SendScreenState extends State<SendScreen>
             Container(
               width: 42, height: 42,
               decoration: BoxDecoration(
-                  color: _kBlue.withOpacity(0.1),
+                  color: _kBlue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12)),
               child: Center(child: Text('${_queue.length}',
                   style: const TextStyle(

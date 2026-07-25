@@ -285,7 +285,7 @@ class _ScanScreenState extends State<ScanScreen>
                 Positioned.fill(
                   child: AnimatedBuilder(
                     animation: _lineController,
-                    builder: (_, __) {
+                    builder: (_, _) {
                       return CustomPaint(
                         painter: _ScanLinePainter(
                           progress: _lineController.value,
@@ -408,7 +408,7 @@ class _OutsideFrameDimmer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black.withOpacity(0.45);
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.45);
 
     final cx = size.width / 2;
     final cy = size.height / 2;
@@ -711,7 +711,7 @@ class _InfoRow extends StatelessWidget {
       Container(
         width: 34, height: 34,
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: iconColor, size: 18),
@@ -756,7 +756,6 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
   static const _kBlue  = Color(0xFF2196F3);
   static const _kGreen = Color(0xFF4CAF50);
   static const _kText  = Color(0xFF212121);
-  static const _kSub   = Color(0xFF757575);
 
   @override
   void initState() {
@@ -797,9 +796,12 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
     final sentCount   = _files.where((f) => f.status == TransferStatus.completed).length;
     final failedCount = _files.where((f) => f.status == TransferStatus.failed).length;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: _allDone,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
         if (!_allDone) {
+          final nav = Navigator.of(context);
           final cancel = await showDialog<bool>(
             context: context,
             builder: (_) => AlertDialog(
@@ -813,10 +815,11 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
               ],
             ),
           );
-          if (cancel == true) { _transfer.cancelAll(); return true; }
-          return false;
+          if (cancel == true && mounted) {
+            _transfer.cancelAll();
+            nav.pop();
+          }
         }
-        return true;
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
@@ -838,8 +841,8 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
                 width: 44, height: 44,
                 decoration: BoxDecoration(
                   color: _allDone
-                      ? _kGreen.withOpacity(0.1)
-                      : _kBlue.withOpacity(0.1),
+                      ? _kGreen.withValues(alpha: 0.1)
+                      : _kBlue.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: _allDone
@@ -904,6 +907,7 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
                     width: double.infinity, height: 52,
                     child: OutlinedButton(
                       onPressed: () async {
+                        final nav = Navigator.of(context);
                         final cancel = await showDialog<bool>(
                           context: context,
                           builder: (_) => AlertDialog(
@@ -920,7 +924,7 @@ class _TransferSendScreenState extends State<_TransferSendScreen> {
                         );
                         if (cancel == true && mounted) {
                           _transfer.cancelAll();
-                          Navigator.of(context).popUntil((r) => r.isFirst || r.settings.name == '/');
+                          nav.popUntil((r) => r.isFirst || r.settings.name == '/');
                         }
                       },
                       style: OutlinedButton.styleFrom(

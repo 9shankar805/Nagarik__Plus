@@ -122,7 +122,7 @@ class _MockTestScreenState extends State<MockTestScreen> {
           // Progress bar
           Container(
             height: 6,
-            color: AppColors.primary.withOpacity(0.2),
+            color: AppColors.primary.withValues(alpha: 0.2),
             child: FractionallySizedBox(
               widthFactor: progress,
               alignment: Alignment.centerLeft,
@@ -144,7 +144,7 @@ class _MockTestScreenState extends State<MockTestScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.success.withOpacity(0.1),
+                          color: AppColors.success.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -212,18 +212,18 @@ class _MockTestScreenState extends State<MockTestScreen> {
 
                     if (showResult) {
                       if (isCorrect) {
-                        bgColor = AppColors.success.withOpacity(0.1);
+                        bgColor = AppColors.success.withValues(alpha: 0.1);
                         borderColor = AppColors.success;
                         textColor = AppColors.success;
                         trailingIcon = Icons.check_circle_rounded;
                       } else if (isSelected && !isCorrect) {
-                        bgColor = AppColors.danger.withOpacity(0.1);
+                        bgColor = AppColors.danger.withValues(alpha: 0.1);
                         borderColor = AppColors.danger;
                         textColor = AppColors.danger;
                         trailingIcon = Icons.cancel_rounded;
                       }
                     } else if (isSelected) {
-                      bgColor = AppColors.primary.withOpacity(0.1);
+                      bgColor = AppColors.primary.withValues(alpha: 0.1);
                       borderColor = AppColors.primary;
                       textColor = AppColors.primary;
                     }
@@ -239,7 +239,7 @@ class _MockTestScreenState extends State<MockTestScreen> {
                           border: Border.all(color: borderColor, width: 1.5),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withOpacity(0.04),
+                                color: Colors.black.withValues(alpha: 0.04),
                                 blurRadius: 4)
                           ],
                         ),
@@ -249,7 +249,7 @@ class _MockTestScreenState extends State<MockTestScreen> {
                               width: 28,
                               height: 28,
                               decoration: BoxDecoration(
-                                color: borderColor.withOpacity(0.15),
+                                color: borderColor.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -284,10 +284,10 @@ class _MockTestScreenState extends State<MockTestScreen> {
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: AppColors.info.withOpacity(0.08),
+                        color: AppColors.info.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                            color: AppColors.info.withOpacity(0.3)),
+                            color: AppColors.info.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,7 +369,7 @@ class _ResultScreen extends StatelessWidget {
                 height: 120,
                 decoration: BoxDecoration(
                   color: (passed ? AppColors.success : AppColors.danger)
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'receive_screen.dart';
-import 'history_screen.dart';
+import 'package:nagarik_plus/core/constants/app_colors.dart';
 import 'select_files_screen.dart';
 import 'connect_screen.dart';
 import 'preparations_screen.dart';
 
-/// Root NagarikShare home — SHAREit-style layout (tasks 1.1–1.7)
+/// Root NagarikShare home — Nagarik Plus themed layout
 class ShareHomeScreen extends StatefulWidget {
   const ShareHomeScreen({super.key});
 
@@ -16,19 +15,12 @@ class ShareHomeScreen extends StatefulWidget {
 }
 
 class _ShareHomeScreenState extends State<ShareHomeScreen> {
-  // ── 1.6 Bottom nav state ────────────────────────────────────────────────────
+  // ── Bottom nav state ────────────────────────────────────────────────────
   int _tab = 0;
 
-  // ── 1.5 Storage state ───────────────────────────────────────────────────────
+  // ── Storage state ───────────────────────────────────────────────────────
   double _usedGb = 0;
   double _totalGb = 0;
-
-  // ── Theme colours ────────────────────────────────────────────────────────────
-  static const _kBg    = Color(0xFFF2F3F5); // light grey page background
-  static const _kBlue  = Color(0xFF2196F3);
-  static const _kText  = Color(0xFF212121);
-  static const _kSub   = Color(0xFF757575);
-  static const _kWhite = Colors.white;
 
   @override
   void initState() {
@@ -38,6 +30,17 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
 
   // ── 1.5 Storage reader ───────────────────────────────────────────────────────
   Future<void> _loadStorage() async {
+    if (Platform.isIOS) {
+      // iOS doesn't provide direct storage access - use placeholder values
+      if (mounted) {
+        setState(() {
+          _totalGb = 64.0; // Typical iPhone storage
+          _usedGb = 32.0;
+        });
+      }
+      return;
+    }
+
     try {
       final dir = Directory('/storage/emulated/0');
       if (await dir.exists()) {
@@ -77,14 +80,14 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
       child: Scaffold(
-        backgroundColor: _kBg,
+        backgroundColor: AppColors.background,
         body: _buildTabBody(),
-        bottomNavigationBar: _buildBottomNav(), // 1.6
+        bottomNavigationBar: _buildBottomNav(),
       ),
     );
   }
 
-  // ── 1.6 Tab body dispatcher ───────────────────────────────────────────────────
+  // ── Tab body dispatcher ───────────────────────────────────────────────────
   Widget _buildTabBody() {
     switch (_tab) {
       case 0:  return _buildHomePage();
@@ -92,18 +95,18 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     }
   }
 
-  Widget _buildPlaceholder() => const Center(
+  Widget _buildPlaceholder() => Center(
     child: Text('Coming Soon',
-        style: TextStyle(fontSize: 18, color: Color(0xFF757575))),
+        style: TextStyle(fontSize: 18, color: AppColors.textMedium)),
   );
 
-  // ── 1.6 Bottom navigation bar ─────────────────────────────────────────────────
+  // ── Bottom navigation bar ─────────────────────────────────────────────────
   Widget _buildBottomNav() {
     return Container(
-      decoration: const BoxDecoration(
-        color: _kWhite,
+      decoration: BoxDecoration(
+        color: AppColors.card,
         border: Border(
-          top: BorderSide(color: Color(0xFFDDDDDD), width: 0.5),
+          top: BorderSide(color: AppColors.divider, width: 0.5),
         ),
       ),
       child: SafeArea(
@@ -171,17 +174,17 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     );
   }
 
-  // ── 1.1 AppBar ────────────────────────────────────────────────────────────────
+  // ── AppBar ────────────────────────────────────────────────────────────────
   Widget _buildAppBar() {
     return Container(
-      color: _kWhite,
+      color: AppColors.card,
       padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
       child: Row(
         children: [
-          const Text(
+          Text(
             'NagarikShare',
             style: TextStyle(
-              color: _kText,
+              color: AppColors.textDark,
               fontSize: 20,
               fontWeight: FontWeight.w800,
             ),
@@ -190,60 +193,60 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
           // Green dollar-circle icon — plain, no bg circle
           _AppBarIconButton(
             icon: Icons.monetization_on_rounded,
-            iconColor: const Color(0xFF4CAF50),
-            badgeColor: const Color(0xFF4CAF50),
+            iconColor: AppColors.success,
+            badgeColor: AppColors.success,
             badgeDot: true,
           ),
           const SizedBox(width: 4),
           // Bell with red badge "1"
           _AppBarIconButton(
             icon: Icons.notifications_none_rounded,
-            iconColor: _kText,
+            iconColor: AppColors.textDark,
             badgeCount: 1,
           ),
           const SizedBox(width: 4),
           // Plus-circle icon
           _AppBarIconButton(
             icon: Icons.add_circle_outline_rounded,
-            iconColor: _kText,
+            iconColor: AppColors.textDark,
           ),
         ],
       ),
     );
   }
 
-  // ── 1.2 Three blue circle action buttons — NO card wrapper ───────────────────
+  // ── Three circle action buttons — NO card wrapper ───────────────────
   Widget _buildActionRow() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // 1.7 Send → PreparationsScreen
+          // Send → PreparationsScreen
           _CircleActionButton(
             icon: Icons.near_me_rounded,
             label: 'Send',
-            color: _kBlue,
+            color: AppColors.primary,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const PreparationsScreen()),
             ),
           ),
-          // 1.7 Receive → ConnectScreen
+          // Receive → ConnectScreen
           _CircleActionButton(
             icon: Icons.move_to_inbox_rounded,
             label: 'Receive',
-            color: _kBlue,
+            color: AppColors.primary,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ConnectScreen()),
             ),
           ),
-          // 1.7 Files → SelectFilesScreen
+          // Files → SelectFilesScreen
           _CircleActionButton(
             icon: Icons.folder_rounded,
             label: 'Files',
-            color: _kBlue,
+            color: AppColors.primary,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const SelectFilesScreen(initialTab: 2)),
@@ -254,24 +257,24 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     );
   }
 
-  // ── 1.3 Banner card — full-width edge-to-edge feel ───────────────────────────
+  // ── Banner card — full-width edge-to-edge feel ───────────────────────────
   Widget _buildBannerCard() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       height: 110,
       decoration: BoxDecoration(
-        color: const Color(0xFFCCCCCC),
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(12),
       ),
       clipBehavior: Clip.hardEdge,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Grey gradient base
+          // Primary gradient base
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF555555), Color(0xFF999999)],
+                colors: [AppColors.primary, AppColors.primaryLight],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -282,9 +285,9 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
             left: 0, top: 0, bottom: 0,
             width: 240,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xCC000000), Color(0x00000000)],
+                  colors: [AppColors.primaryDark.withOpacity(0.8), Colors.transparent],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -301,10 +304,10 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                 Container(
                   width: 44, height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0x33FFFFFF),
+                    color: AppColors.textWhite.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.newspaper_rounded, color: _kWhite, size: 24),
+                  child: const Icon(Icons.newspaper_rounded, color: AppColors.textWhite, size: 24),
                 ),
                 const SizedBox(width: 10),
                 // Text column
@@ -318,7 +321,7 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: _kWhite,
+                          color: AppColors.textWhite,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -328,7 +331,7 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                         'AD You must know!',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Color(0xFFCCCCCC),
+                          color: AppColors.textLight,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -337,12 +340,12 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                // Blue "Click" button
+                // "Click" button
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _kBlue,
-                    foregroundColor: _kWhite,
+                    backgroundColor: AppColors.card,
+                    foregroundColor: AppColors.primary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -364,7 +367,7 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     );
   }
 
-  // ── 1.4 VIDEO DOWNLOADER card ─────────────────────────────────────────────────
+  // ── VIDEO DOWNLOADER card ─────────────────────────────────────────────────
   Widget _buildVideoDownloader() {
     final apps = [
       _AppIconData(
@@ -397,10 +400,10 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
       decoration: BoxDecoration(
-        color: _kWhite,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 6, offset: Offset(0, 2)),
+        boxShadow: [
+          BoxShadow(color: AppColors.shadow, blurRadius: 6, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -410,12 +413,12 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'VIDEO DOWNLOADER',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
-                  color: _kText,
+                  color: AppColors.textDark,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -425,15 +428,15 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF0F0F0),
+                    color: AppColors.background,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
+                  child: Text(
                     'MORE',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: _kSub,
+                      color: AppColors.textMedium,
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -477,13 +480,13 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                             child: Container(
                               width: 20, height: 20,
                               decoration: BoxDecoration(
-                                color: _kWhite,
+                                color: AppColors.card,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: const Color(0xFFEEEEEE), width: 1.5),
+                                border: Border.all(color: AppColors.divider, width: 1.5),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_downward_rounded,
-                                color: _kBlue,
+                                color: AppColors.primary,
                                 size: 12,
                               ),
                             ),
@@ -493,10 +496,10 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                       const SizedBox(height: 8),
                       Text(
                         app.label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color: _kText,
+                          color: AppColors.textDark,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 1,
@@ -513,7 +516,7 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
     );
   }
 
-  // ── 1.5 Storage meter card ────────────────────────────────────────────────────
+  // ── Storage meter card ────────────────────────────────────────────────────
   Widget _buildStorageCard() {
     if (_totalGb == 0) return const SizedBox.shrink();
 
@@ -525,10 +528,10 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: _kWhite,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 6, offset: Offset(0, 2)),
+        boxShadow: [
+          BoxShadow(color: AppColors.shadow, blurRadius: 6, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -542,15 +545,15 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                 CircularProgressIndicator(
                   value: usedPct,
                   strokeWidth: 6,
-                  backgroundColor: const Color(0xFFEEEEEE),
-                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF9800)),
+                  backgroundColor: AppColors.divider,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accent),
                 ),
                 Text(
                   '$pctInt%',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: _kText,
+                    color: AppColors.textDark,
                   ),
                 ),
               ],
@@ -564,8 +567,8 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
               children: [
                 Text(
                   'Available ${freeGb.toStringAsFixed(2)}GB',
-                  style: const TextStyle(
-                    color: _kText,
+                  style: TextStyle(
+                    color: AppColors.textDark,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
@@ -573,7 +576,7 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
                 const SizedBox(height: 3),
                 Text(
                   'Total ${_totalGb.toStringAsFixed(2)}GB',
-                  style: const TextStyle(color: _kSub, fontSize: 12),
+                  style: TextStyle(color: AppColors.textMedium, fontSize: 12),
                 ),
               ],
             ),
@@ -582,15 +585,15 @@ class _ShareHomeScreenState extends State<ShareHomeScreen> {
           TextButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-              foregroundColor: _kSub,
+              foregroundColor: AppColors.textMedium,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: const Text(
+            child: Text(
               'CLEAN',
               style: TextStyle(
-                color: _kSub,
+                color: AppColors.textMedium,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
@@ -702,8 +705,8 @@ class _CircleActionButton extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
-            style: const TextStyle(
-              color: Color(0xFF212121),
+            style: TextStyle(
+              color: AppColors.textDark,
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

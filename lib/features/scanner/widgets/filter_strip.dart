@@ -22,7 +22,7 @@ class FilterStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, i) {
           final f      = _filters[i];
           final active = f == selected;
@@ -33,7 +33,7 @@ class FilterStrip extends StatelessWidget {
               width: 56,
               decoration: BoxDecoration(
                 color: active
-                    ? const Color(0xFF1565C0).withOpacity(0.12)
+                    ? const Color(0xFF1565C0).withValues(alpha: 0.12)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(

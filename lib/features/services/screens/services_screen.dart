@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/l10n/l10n_extension.dart';
 import '../../advisors/screens/advisors_list_screen.dart';
-import '../models/citizen_service.dart';
 import '../providers/services_provider.dart';
 import 'service_detail_screen.dart';
 
@@ -139,16 +138,16 @@ class _ServicesScreenState extends State<ServicesScreen> {
     final providerServices = context.watch<ServicesProvider>().services;
     final List<_ServiceData> sourceList = providerServices.isNotEmpty
         ? providerServices.map((cs) => _ServiceData(
-              title: cs.name,
-              subtitle: cs.description ?? cs.category,
+              title: cs.title,
+              subtitle: cs.description ?? cs.category ?? '',
               icon: Icons.article_rounded,
               color: AppColors.primary,
-              eligibility: cs.eligibility ?? 'All Nepali citizens',
-              documents: cs.requiredDocuments,
-              steps: cs.steps,
-              fee: cs.feeStructure ?? 'N/A',
+              eligibility: cs.eligibility?.entries.map((e) => '${e.key}: ${e.value}').join(', ') ?? 'All Nepali citizens',
+              documents: cs.documents?.entries.map((e) => '${e.key}: ${e.value}').toList() ?? [],
+              steps: cs.steps?.entries.map((e) => '${e.key}: ${e.value}').toList() ?? [],
+              fee: cs.fee ?? 'N/A',
               processingTime: cs.processingTime ?? 'Standard processing',
-              faqs: cs.faqs.map((f) => f.question).toList(),
+              faqs: cs.faqs?.map((f) => f.toString()).toList() ?? [],
             )).toList()
         : _services;
 
@@ -190,7 +189,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 hintStyle: const TextStyle(color: Colors.white60),
                 prefixIcon: const Icon(Icons.search_rounded, color: Colors.white60),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.15),
+                fillColor: Colors.white.withValues(alpha: 0.15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -219,7 +218,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
-                    BoxShadow(color: Colors.indigo.withOpacity(0.25), blurRadius: 8, offset: const Offset(0, 3)),
+                    BoxShadow(color: Colors.indigo.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 3)),
                   ],
                 ),
                 child: Row(
@@ -348,7 +347,7 @@ class _ServiceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -368,7 +367,7 @@ class _ServiceCard extends StatelessWidget {
                   width: 52,
                   height: 52,
                   decoration: BoxDecoration(
-                    color: service.color.withOpacity(0.12),
+                    color: service.color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(service.icon, color: service.color, size: 26),

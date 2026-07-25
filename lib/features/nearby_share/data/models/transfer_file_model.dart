@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 /// Represents a file queued or in-progress for transfer
 class TransferFileModel {

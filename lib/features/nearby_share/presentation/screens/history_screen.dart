@@ -79,7 +79,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.08),
+                      color: Colors.red.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Text('Clear All',
@@ -118,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.1),
+          color: Colors.red.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(14),
         ),
         child: const Icon(Icons.delete_rounded, color: Colors.red),
@@ -137,7 +137,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           Container(
             width: 46, height: 46,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 22),
@@ -155,8 +155,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: isSent
-                      ? _kBlue.withOpacity(0.1)
-                      : const Color(0xFF00C17C).withOpacity(0.1),
+                      ? _kBlue.withValues(alpha: 0.1)
+                      : const Color(0xFF00C17C).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(isSent ? 'SENT' : 'RECEIVED',
@@ -191,9 +191,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
       Container(
         width: 72, height: 72,
         decoration: BoxDecoration(
-          color: _kBlue.withOpacity(0.08), shape: BoxShape.circle),
+          color: _kBlue.withValues(alpha: 0.08), shape: BoxShape.circle),
         child: Icon(Icons.history_rounded,
-            color: _kBlue.withOpacity(0.5), size: 36),
+            color: _kBlue.withValues(alpha: 0.5), size: 36),
       ),
       const SizedBox(height: 14),
       const Text('No Transfer History',

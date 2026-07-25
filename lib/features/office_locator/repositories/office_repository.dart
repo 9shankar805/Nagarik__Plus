@@ -21,10 +21,10 @@ class OfficeRepository {
   }) async {
     if (!forceRefresh &&
         _officeBox != null &&
-        _officeBox!.isNotEmpty &&
+        _officeBox.isNotEmpty &&
         category == null &&
         search == null) {
-      return _officeBox!.values.toList();
+      return _officeBox.values.toList();
     }
 
     try {
@@ -36,13 +36,13 @@ class OfficeRepository {
       );
       final offices = response.data ?? [];
       if (_officeBox != null && category == null && search == null) {
-        await _officeBox!.clear();
-        await _officeBox!.addAll(offices);
+        await _officeBox.clear();
+        await _officeBox.addAll(offices);
       }
       return offices;
     } catch (e) {
-      if (_officeBox != null && _officeBox!.isNotEmpty) {
-        return _officeBox!.values.toList();
+      if (_officeBox != null && _officeBox.isNotEmpty) {
+        return _officeBox.values.toList();
       }
       rethrow;
     }

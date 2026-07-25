@@ -6,9 +6,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:provider/provider.dart';
 import 'document_scanner_screen.dart';
 import '../models/document_model.dart';
 import '../providers/document_service.dart';
+import '../providers/documents_provider.dart';
 import '../services/document_pdf_printer.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
@@ -297,7 +299,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                   leading: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF388E3C).withOpacity(0.2),
+                      color: const Color(0xFF388E3C).withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.photo_library_rounded, color: Color(0xFF4ADE80)),
@@ -319,7 +321,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                   leading: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF9C27B0).withOpacity(0.2),
+                      color: const Color(0xFF9C27B0).withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.folder_rounded, color: Color(0xFFCE93D8)),
@@ -341,7 +343,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                     leading: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(0.2),
+                        color: AppColors.danger.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.delete_outline_rounded, color: AppColors.danger),
@@ -376,7 +378,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
         final fileExists = !isAsset && File(path).existsSync();
 
         return Dialog(
-          backgroundColor: Colors.black.withOpacity(0.92),
+          backgroundColor: Colors.black.withValues(alpha: 0.92),
           insetPadding: const EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -543,15 +545,17 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
             tooltip: 'Download File',
             icon: const Icon(Icons.download_rounded, color: Colors.white, size: 22),
             onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
               try {
                 final docId = int.tryParse(doc.id);
                 if (docId != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  final docProvider = context.read<DocumentsProvider>();
+                  messenger.showSnackBar(
                     const SnackBar(content: Text('Downloading document...')),
                   );
-                  await context.read<DocumentsProvider>().downloadDoc(docId);
+                  await docProvider.downloadDoc(docId);
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    messenger.showSnackBar(
                       const SnackBar(
                         content: Text('Document downloaded successfully'),
                         backgroundColor: AppColors.secondary,
@@ -561,7 +565,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                 }
               } catch (e) {
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text('Download failed: ${e.toString().replaceFirst('Exception: ', '')}'),
                       backgroundColor: AppColors.danger,
@@ -724,7 +728,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text('Stored in Locker',
@@ -962,7 +966,7 @@ class _NationalIdCard extends StatelessWidget {
         headerContent: Row(
           children: [
             Image.asset(AppAssets.appIcon, width: 22, height: 22,
-                errorBuilder: (_, __, ___) =>
+                errorBuilder: (_, _, _) =>
                     const Icon(Icons.shield, color: Colors.white, size: 18)),
             const SizedBox(width: 8),
             const Expanded(
@@ -1083,7 +1087,7 @@ class _NationalIdCard extends StatelessWidget {
       headerContent: Row(
         children: [
           Image.asset(AppAssets.appIcon, width: 22, height: 22,
-              errorBuilder: (_, __, ___) =>
+              errorBuilder: (_, _, _) =>
                   const Icon(Icons.shield, color: Colors.white, size: 18)),
           const SizedBox(width: 8),
           const Expanded(
@@ -1136,7 +1140,7 @@ class _NationalIdCard extends StatelessWidget {
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Image.asset(doc.assetImagePath!, fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => const Icon(
+                                    errorBuilder: (_, _, _) => const Icon(
                                         Icons.person_rounded,
                                         color: Color(0xFF8899BB),
                                         size: 40)),
@@ -1527,7 +1531,7 @@ class _GenericCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.25),
+            color: AppColors.primary.withValues(alpha: 0.25),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -1621,7 +1625,7 @@ class _ImagePreviewBox extends StatelessWidget {
           color: const Color(0xFF101923),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: hasFile ? AppColors.primary.withOpacity(0.6) : Colors.white12,
+            color: hasFile ? AppColors.primary.withValues(alpha: 0.6) : Colors.white12,
             width: hasFile ? 1.5 : 1,
           ),
         ),
@@ -1661,7 +1665,7 @@ class _ImagePreviewBox extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.75),
+                    color: Colors.black.withValues(alpha: 0.75),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(title,
@@ -1685,7 +1689,7 @@ class _ImagePreviewBox extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           blurRadius: 4,
                         ),
                       ],
@@ -1789,7 +1793,7 @@ class _ActionBtn extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 13),
         decoration: BoxDecoration(
-          color: isPrimary ? AppColors.primary : Colors.white.withOpacity(0.1),
+          color: isPrimary ? AppColors.primary : Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

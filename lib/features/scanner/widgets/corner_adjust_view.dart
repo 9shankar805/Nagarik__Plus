@@ -95,10 +95,10 @@ class _CornerAdjustViewState extends State<CornerAdjustView> {
             Image.asset(
               widget.imagePath,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => Image.network(
+              errorBuilder: (_, _, _) => Image.network(
                 widget.imagePath,
                 fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => const ColoredBox(color: Colors.black12),
+                errorBuilder: (_, _, _) => const ColoredBox(color: Colors.black12),
               ),
             ),
 
@@ -123,7 +123,7 @@ class _CornerAdjustViewState extends State<CornerAdjustView> {
                       border: Border.all(color: Colors.white, width: 2.5),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.35),
+                          color: Colors.black.withValues(alpha: 0.35),
                           blurRadius: 6,
                         ),
                       ],
@@ -166,7 +166,7 @@ class _Magnifier extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 8),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 8),
           ],
         ),
         child: ClipOval(
@@ -176,7 +176,7 @@ class _Magnifier extends StatelessWidget {
             child: Transform.scale(
               scale: 2.5,
               child: Image.asset(imagePath, fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const SizedBox()),
+                errorBuilder: (_, _, _) => const SizedBox()),
             ),
           ),
         ),

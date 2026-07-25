@@ -139,7 +139,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     Image.asset(
                       widget.post.imageAsset!,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _buildFallbackBanner(),
+                      errorBuilder: (_, _, _) => _buildFallbackBanner(),
                     )
                   else
                     _buildFallbackBanner(),

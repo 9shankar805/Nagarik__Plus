@@ -35,7 +35,7 @@ class TransferProgressPanel extends StatelessWidget {
           Container(
             width: 42, height: 42,
             decoration: BoxDecoration(
-              color: catColor.withOpacity(0.1),
+              color: catColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: catColor, size: 20),
@@ -67,7 +67,7 @@ class TransferProgressPanel extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: file.progress,
-            backgroundColor: barColor.withOpacity(0.1),
+            backgroundColor: barColor.withValues(alpha: 0.1),
             valueColor: AlwaysStoppedAnimation(barColor),
             minHeight: 6,
           ),

@@ -28,6 +28,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
   // Hotspot/WiFi readiness
   bool   _checking  = true;
   bool   _wifiReady = false;
+  bool   _hotspotActive = true;
   String _localIp   = '192.168.43.1';
   int    _serverPort = 8888;
 
@@ -36,7 +37,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
   final  _transfer      = TransferService();
   final  _connService   = ConnectionService();
   StreamSubscription<dynamic>? _progressSub;
-  List<TransferFileModel> _receivedFiles = [];
+  final List<TransferFileModel> _receivedFiles = [];
   bool   _receiving = false;
 
   static const _kGreen = Color(0xFF2DC97E);
@@ -51,9 +52,44 @@ class _ConnectScreenState extends State<ConnectScreen> {
     _checkWifiReady();
   }
 
+  @override
+  void dispose() {
+    _progressSub?.cancel();
+    _transfer.stopReceiveServer();
+    super.dispose();
+  }
+
+  Future<void> _loadDeviceName() async {
+    try {
+      final host = Platform.localHostname;
+      if (host.isNotEmpty) setState(() => _deviceName = host);
+    } catch (_) {}
+  }
+
   /// Called after WiFi check passes — starts the server before QR is shown
   String _customSsid = '';
   String _customPassword = '';
+
+  Future<void> _startReceiveServer() async {
+    if (_serverStarted) return;
+    _serverStarted = true;
+
+    _progressSub = _transfer.progressStream.listen((file) {
+      if (!mounted) return;
+      setState(() {
+        final idx = _receivedFiles.indexWhere((f) => f.id == file.id);
+        if (idx == -1) {
+          _receivedFiles.add(file);
+        } else {
+          _receivedFiles[idx] = file;
+        }
+        _receiving = true;
+      });
+    });
+
+    final port = await _transfer.startReceiveServer(peerName: _deviceName);
+    if (mounted) setState(() => _serverPort = port);
+  }
 
   /// Called after WiFi check passes — starts hotspot + TCP server before QR is shown
   Future<void> _initReceiver() async {
@@ -73,41 +109,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
     if (mounted) setState(() {});
   }
 
-  @override
-  void dispose() {
-    _progressSub?.cancel();
-    _transfer.stopReceiveServer();
-    super.dispose();
-  }
-
-  Future<void> _startReceiveServer() async {
-    if (_serverStarted) return;
-    _serverStarted = true;
-
-    _progressSub = _transfer.progressStream.listen((file) {
-      if (!mounted) return;
-      setState(() {
-        final idx = _receivedFiles.indexWhere((f) => f.id == file.id);
-        if (idx == -1) _receivedFiles.add(file);
-        else           _receivedFiles[idx] = file;
-        _receiving = true;
-      });
-    });
-
-    final port = await _transfer.startReceiveServer(peerName: _deviceName);
-    if (mounted) setState(() => _serverPort = port);
-  }
-
-  Future<void> _loadDeviceName() async {
-    try {
-      final host = Platform.localHostname;
-      if (host.isNotEmpty) setState(() => _deviceName = host);
-    } catch (_) {}
-  }
-
-  bool _hotspotActive = true; // Always true — we don't gate on hotspot state
-
-  /// Check permissions and detect local IP.
   Future<void> _checkWifiReady() async {
     bool permGranted = false;
     String ip        = '192.168.43.1';
@@ -118,19 +119,17 @@ class _ConnectScreenState extends State<ConnectScreen> {
           ? await Permission.nearbyWifiDevices.isGranted
           : await Permission.locationWhenInUse.isGranted;
 
-      // Detect local IP from any non-loopback IPv4 interface
       try {
         final interfaces = await NetworkInterface.list(
             type: InternetAddressType.IPv4, includeLinkLocal: false);
-        // Prefer wlan/ap interface, fallback to any non-loopback address
         String? bestIp;
         for (final iface in interfaces) {
           for (final addr in iface.addresses) {
             if (addr.isLoopback) continue;
-            bestIp ??= addr.address; // any address as fallback
+            bestIp ??= addr.address;
             final name = iface.name.toLowerCase();
             if (name.contains('wlan') || name.contains('ap') || name.contains('wifi')) {
-              bestIp = addr.address; // prefer wifi/hotspot interface
+              bestIp = addr.address;
               break;
             }
           }
@@ -144,11 +143,10 @@ class _ConnectScreenState extends State<ConnectScreen> {
     if (mounted) {
       setState(() {
         _wifiReady     = permGranted;
-        _hotspotActive = true; // always allow through if permission granted
+        _hotspotActive = true;
         _localIp       = ip;
         _checking      = false;
       });
-      // Start TCP server immediately so port is known before QR renders
       if (permGranted) _initReceiver();
     }
   }
@@ -500,8 +498,8 @@ class _ConnectScreenState extends State<ConnectScreen> {
               width: 44, height: 44,
               decoration: BoxDecoration(
                 color: done
-                    ? const Color(0xFF4CAF50).withOpacity(0.1)
-                    : _kBlue.withOpacity(0.1),
+                    ? const Color(0xFF4CAF50).withValues(alpha: 0.1)
+                    : _kBlue.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: done
@@ -648,7 +646,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
           Switch(
             value: _ultraFastMode,
             onChanged: (v) => setState(() => _ultraFastMode = v),
-            activeColor: _kGreen,
+            activeThumbColor: _kGreen,
           ),
         ],
       ),

@@ -89,7 +89,7 @@ class _AdvisorPaymentScreenState extends State<AdvisorPaymentScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: paymentProv.selectedMethod.brandColor.withOpacity(0.12),
+                      color: paymentProv.selectedMethod.brandColor.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -372,7 +372,7 @@ class _AdvisorPaymentScreenState extends State<AdvisorPaymentScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2)),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Row(
@@ -399,7 +399,7 @@ class _AdvisorPaymentScreenState extends State<AdvisorPaymentScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
+                            color: AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -427,7 +427,7 @@ class _AdvisorPaymentScreenState extends State<AdvisorPaymentScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2)),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -495,7 +495,7 @@ class _AdvisorPaymentScreenState extends State<AdvisorPaymentScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6, offset: const Offset(0, 2)),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -647,7 +647,7 @@ class _PaymentOptionCard extends StatelessWidget {
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6, offset: const Offset(0, 2)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 6, offset: const Offset(0, 2)),
           ],
         ),
         child: Row(
@@ -655,7 +655,7 @@ class _PaymentOptionCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: method.brandColor.withOpacity(0.12),
+                color: method.brandColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -680,11 +680,16 @@ class _PaymentOptionCard extends StatelessWidget {
               ),
             ),
 
-            Radio<bool>(
-              value: true,
-              groupValue: isSelected,
-              activeColor: method.brandColor,
-              onChanged: (_) => onTap(),
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? method.brandColor : AppColors.textLight,
+                  width: isSelected ? 6.5 : 2,
+                ),
+              ),
             ),
           ],
         ),

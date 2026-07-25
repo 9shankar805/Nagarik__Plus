@@ -78,8 +78,11 @@ class _ConnectToiOSScreenState extends State<ConnectToiOSScreen> {
   Future<void> _requestWifiPermission() async {
     if (Platform.isAndroid) {
       final sdk = await _sdkInt();
-      if (sdk >= 33) await Permission.nearbyWifiDevices.request();
-      else           await Permission.locationWhenInUse.request();
+      if (sdk >= 33) {
+        await Permission.nearbyWifiDevices.request();
+      } else {
+        await Permission.locationWhenInUse.request();
+      }
     }
     await _checkWifiReady();
   }

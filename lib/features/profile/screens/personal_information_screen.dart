@@ -21,6 +21,7 @@ class _PersonalInformationScreenState
   bool _editing = false;
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isSocialLogin = false;
 
   // Controllers
   final _fullName   = TextEditingController();
@@ -40,10 +41,12 @@ class _PersonalInformationScreenState
       if (user != null) {
         _fullName.text = user.name;
         _email.text = user.email;
-        _phone.text = user.phone;
+        _phone.text = user.phone ?? '';
         _dob.text = user.dob ?? '';
         _address.text = user.address ?? '';
         _citizenNo.text = user.citizenshipNumber ?? '';
+        _isSocialLogin =
+            user.loginProvider == 'google' || user.loginProvider == 'apple';
       }
     });
   }
@@ -81,6 +84,8 @@ class _PersonalInformationScreenState
                     _isLoading = true;
                     _errorMessage = null;
                   });
+                  final profileProvider = context.read<ProfileProvider>();
+                  final messenger = ScaffoldMessenger.of(context);
                   try {
                     final data = {
                       'name': _fullName.text,
@@ -90,10 +95,10 @@ class _PersonalInformationScreenState
                       'address': _address.text,
                       'citizenship_number': _citizenNo.text,
                     };
-                    await context.read<ProfileProvider>().updateProfile(data);
+                    await profileProvider.updateProfile(data);
                     if (mounted) {
                       setState(() => _editing = false);
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      messenger.showSnackBar(
                         const SnackBar(
                           content: Text('Information updated successfully'),
                           backgroundColor: AppColors.secondary,
@@ -105,7 +110,7 @@ class _PersonalInformationScreenState
                       setState(() {
                         _errorMessage = e.toString().replaceFirst('Exception: ', '');
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      messenger.showSnackBar(
                         SnackBar(
                           content: Text('Failed to update: $_errorMessage'),
                           backgroundColor: AppColors.danger,
@@ -162,13 +167,39 @@ class _PersonalInformationScreenState
                       v == null || v.isEmpty ? 'Name is required' : null,
                 ),
                 _divider(),
+                if (_isSocialLogin) ...[
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      Icon(
+                        context.read<AuthProvider>().user?.loginProvider ==
+                                'apple'
+                            ? Icons.apple
+                            : Icons.g_mobiledata_rounded,
+                        color: context.read<AuthProvider>().user?.loginProvider ==
+                                'apple'
+                            ? Colors.black
+                            : const Color(0xFF1A73E8),
+                        size: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Logged in with ${context.read<AuthProvider>().user?.loginProvider == 'apple' ? 'Apple' : 'Google'} (email cannot be changed)',
+                        style: const TextStyle(
+                            fontSize: 12, color: Color(0xFF5A6A80)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 _buildField(
                   controller: _email,
                   label: 'Email Address',
                   icon: Icons.email_rounded,
                   iconColor: const Color(0xFFE65100),
                   iconBg: const Color(0xFFFFEDE3),
-                  enabled: _editing,
+                  enabled: _editing && !_isSocialLogin,
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) =>
                       v == null || !v.contains('@') ? 'Enter valid email' : null,
@@ -218,10 +249,10 @@ class _PersonalInformationScreenState
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.info.withOpacity(0.07),
+                  color: AppColors.info.withValues(alpha: 0.07),
                   borderRadius: BorderRadius.circular(12),
                   border:
-                      Border.all(color: AppColors.info.withOpacity(0.2)),
+                      Border.all(color: AppColors.info.withValues(alpha: 0.2)),
                 ),
                 child: const Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,14 +281,16 @@ class _PersonalInformationScreenState
   }
 
   Future<void> _pickAndUploadAvatar() async {
+    final profileProvider = context.read<ProfileProvider>();
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final picker = ImagePicker();
       final picked = await picker.pickImage(source: ImageSource.gallery);
       if (picked != null) {
         setState(() => _isLoading = true);
-        await context.read<ProfileProvider>().uploadAvatar(File(picked.path));
+        await profileProvider.uploadAvatar(File(picked.path));
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          messenger.showSnackBar(
             const SnackBar(
               content: Text('Avatar updated successfully'),
               backgroundColor: AppColors.secondary,
@@ -267,7 +300,7 @@ class _PersonalInformationScreenState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(
             content: Text('Avatar upload failed: ${e.toString().replaceFirst('Exception: ', '')}'),
             backgroundColor: AppColors.danger,
@@ -297,7 +330,7 @@ class _PersonalInformationScreenState
               border: Border.all(color: AppColors.primary, width: 2.5),
               boxShadow: [
                 BoxShadow(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withValues(alpha: 0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 4)),
               ],
@@ -307,7 +340,7 @@ class _PersonalInformationScreenState
                   ? Image.network(
                       user!.avatarUrl!,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const Icon(Icons.person_rounded,
+                      errorBuilder: (_, _, _) => const Icon(Icons.person_rounded,
                           size: 52, color: AppColors.primary),
                     )
                   : const Icon(Icons.person_rounded,
@@ -344,7 +377,7 @@ class _PersonalInformationScreenState
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2)),
         ],

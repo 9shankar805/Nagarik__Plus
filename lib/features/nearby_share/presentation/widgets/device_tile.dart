@@ -30,7 +30,7 @@ class DeviceTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: _kBord),
           boxShadow: [BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8, offset: const Offset(0, 2))],
         ),
         child: Row(children: [
@@ -38,7 +38,7 @@ class DeviceTile extends StatelessWidget {
           Container(
             width: 48, height: 48,
             decoration: BoxDecoration(
-              color: typeColor.withOpacity(0.1),
+              color: typeColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.phone_android_rounded, color: typeColor, size: 26),

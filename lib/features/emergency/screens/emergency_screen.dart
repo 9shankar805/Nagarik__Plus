@@ -237,7 +237,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
+                              color: Colors.black.withValues(alpha: 0.06),
                               blurRadius: 6,
                               offset: const Offset(0, 2))
                         ],
@@ -253,7 +253,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   width: 38,
                                   height: 38,
                                   decoration: BoxDecoration(
-                                    color: contact.color.withOpacity(0.12),
+                                    color: contact.color.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Icon(contact.icon,
@@ -264,7 +264,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: contact.color.withOpacity(0.1),
+                                    color: contact.color.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(contact.number,
@@ -320,7 +320,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 6)
                       ],
                     ),
@@ -330,7 +330,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: AppColors.danger.withOpacity(0.1),
+                            color: AppColors.danger.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(Icons.local_hospital_rounded,
@@ -354,7 +354,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: AppColors.secondary.withOpacity(0.1),
+                                  color: AppColors.secondary.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(hospital.type,

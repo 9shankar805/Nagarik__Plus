@@ -18,7 +18,7 @@ class BannerModel {
     this.linkValue,
   });
 
-  factory BannerModel.fromJson(Map&lt;String, dynamic&gt; json) {
+  factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
       id: json['id'],
       title: json['title'],

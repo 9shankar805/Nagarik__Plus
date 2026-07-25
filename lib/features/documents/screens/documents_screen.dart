@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_assets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:dio/dio.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/l10n/l10n_extension.dart';
-import '../../../core/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 import '../../scanner/screens/camera_scanner_screen.dart';
 import '../../scanner/controllers/scanner_controller.dart';
 import '../../scanner/screens/vault_screen.dart';
 import '../models/document_model.dart';
-import '../providers/document_service.dart';
 import '../providers/documents_provider.dart';
 import 'document_detail_screen.dart';
 
@@ -35,104 +34,8 @@ class _DocumentsScreenState extends State<DocumentsScreen>
     _DocCategory('Academic', Icons.school_rounded),
   ];
 
-  final List<_DocumentData> _allDocuments = [
-    _DocumentData(
-      title: AppStrings.nationalId,
-      subtitle: 'NID: 1234-5678-9012',
-      icon: Icons.badge_rounded,
-      color: AppColors.primary,
-      category: 'Identity',
-      type: 'national_id',
-      expiryDate: null,
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.drivingLicense,
-      subtitle: 'No: 02-78-002345',
-      icon: Icons.drive_eta_rounded,
-      color: AppColors.secondary,
-      category: 'Identity',
-      type: 'driving_license',
-      expiryDate: DateTime(2025, 6, 15),
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.pan,
-      subtitle: 'PAN: 302456789',
-      icon: Icons.receipt_long_rounded,
-      color: AppColors.accent,
-      category: 'Finance',
-      type: 'pan',
-      expiryDate: null,
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.citizenship,
-      subtitle: 'No: 040-02-54321',
-      icon: Icons.assignment_ind_rounded,
-      color: const Color(0xFF6A1B9A),
-      category: 'Identity',
-      type: 'citizenship',
-      expiryDate: null,
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.passport,
-      subtitle: 'No: Pa1234567',
-      icon: Icons.book_rounded,
-      color: const Color(0xFF00695C),
-      category: 'Identity',
-      type: 'passport',
-      expiryDate: DateTime(2028, 9, 20),
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.voterId,
-      subtitle: 'Not uploaded yet',
-      icon: Icons.how_to_vote_rounded,
-      color: AppColors.danger,
-      category: 'Identity',
-      type: 'voter_id',
-      expiryDate: null,
-      isUploaded: false,
-    ),
-    _DocumentData(
-      title: AppStrings.vehicleBluebook,
-      subtitle: 'Ba 3 Pa 2345',
-      icon: Icons.directions_car_rounded,
-      color: const Color(0xFF1565C0),
-      category: 'Vehicle',
-      type: 'vehicle_bluebook',
-      expiryDate: DateTime(2025, 3, 10),
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: AppStrings.insurance,
-      subtitle: 'Policy: INS-0012345',
-      icon: Icons.security_rounded,
-      color: const Color(0xFF00838F),
-      category: 'Finance',
-      type: 'insurance',
-      expiryDate: DateTime(2025, 1, 30),
-      isUploaded: true,
-    ),
-    _DocumentData(
-      title: 'Birth Certificate',
-      subtitle: 'Not uploaded yet',
-      icon: Icons.child_care_rounded,
-      color: const Color(0xFF558B2F),
-      category: 'Identity',
-      type: 'birth_certificate',
-      expiryDate: null,
-      isUploaded: false,
-    ),
-  ];
 
-  List<_DocumentData> get _filteredDocuments {
-    if (_selectedCategory == 0) return _allDocuments;
-    final cat = _categories[_selectedCategory].label;
-    return _allDocuments.where((d) => d.category == cat).toList();
-  }
+
 
   @override
   void initState() {
@@ -174,7 +77,11 @@ class _DocumentsScreenState extends State<DocumentsScreen>
           style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.white),
@@ -221,7 +128,7 @@ class _DocumentsScreenState extends State<DocumentsScreen>
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.primary, AppColors.primary.withOpacity(0.8)],
+                    colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.8)],
                   ),
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -230,7 +137,7 @@ class _DocumentsScreenState extends State<DocumentsScreen>
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(Icons.lock_rounded, color: Colors.white, size: 22),
@@ -393,7 +300,7 @@ class _DocumentsScreenState extends State<DocumentsScreen>
                 mainAxisSpacing: 12,
               ),
               itemCount: 6,
-              itemBuilder: (_, __) => Container(
+              itemBuilder: (_, _) => Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
@@ -517,7 +424,7 @@ class _DocumentCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -551,7 +458,7 @@ class _DocumentCard extends StatelessWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.12),
+                        color: color.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: doc.assetImagePath != null
@@ -569,7 +476,7 @@ class _DocumentCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.warning.withOpacity(0.15),
+                          color: AppColors.warning.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -585,7 +492,7 @@ class _DocumentCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.danger.withOpacity(0.1),
+                          color: AppColors.danger.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -609,7 +516,7 @@ class _DocumentCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  doc.isUploaded ? (doc.subtitle ?? '') : context.l10n.notUploadedYet,
+                  doc.isUploaded ? doc.subtitle : context.l10n.notUploadedYet,
                   style: const TextStyle(
                     color: AppColors.textLight,
                     fontSize: 10,
@@ -663,10 +570,10 @@ class _AddDocumentCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.05),
+          color: AppColors.primary.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             width: 1.5,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
@@ -703,12 +610,15 @@ class _AddDocumentSheetState extends State<_AddDocumentSheet> {
   double _progress = 0.0;
 
   Future<void> _handleFilePick(BuildContext context, {required bool isCamera}) async {
+    final provider = context.read<DocumentsProvider>();
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       String? filePath;
       String title = 'Uploaded Document';
       if (isCamera) {
         final picker = ImagePicker();
-        final picked = await picker.pickImage(source: ImageSource.gallery);
+        final picked = await picker.pickImage(source: ImageSource.camera);
         filePath = picked?.path;
       } else {
         final result = await FilePicker.platform.pickFiles(
@@ -738,7 +648,7 @@ class _AddDocumentSheetState extends State<_AddDocumentSheet> {
       });
 
       if (!mounted) return;
-      await context.read<DocumentsProvider>().uploadDocument(
+      await provider.uploadDocument(
         formData,
         onSendProgress: (sent, total) {
           if (total > 0 && mounted) {
@@ -748,8 +658,8 @@ class _AddDocumentSheetState extends State<_AddDocumentSheet> {
       );
 
       if (mounted) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
+        navigator.pop();
+        messenger.showSnackBar(
           const SnackBar(
             content: Text('Document saved securely in Digital Locker!'),
             backgroundColor: AppColors.secondary,
@@ -758,7 +668,7 @@ class _AddDocumentSheetState extends State<_AddDocumentSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(
             content: Text('Upload failed: ${e.toString().replaceFirst('Exception: ', '')}'),
             backgroundColor: AppColors.danger,
@@ -839,7 +749,7 @@ class _AddDocumentSheetState extends State<_AddDocumentSheet> {
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
-                        color: o.color.withOpacity(0.1),
+                        color: o.color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -874,27 +784,7 @@ class _DocCategory {
   const _DocCategory(this.label, this.icon);
 }
 
-class _DocumentData {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
-  final String category;
-  final String type; // maps to AppAssets.forDocType()
-  final DateTime? expiryDate;
-  final bool isUploaded;
 
-  const _DocumentData({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.color,
-    required this.category,
-    required this.type,
-    this.expiryDate,
-    required this.isUploaded,
-  });
-}
 
 class _StatChip extends StatelessWidget {
   final String label;
@@ -912,7 +802,7 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

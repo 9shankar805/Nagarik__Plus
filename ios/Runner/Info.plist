@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -24,6 +26,47 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Nagarik+ requires camera access to scan documents, QR codes, and National ID cards.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Nagarik+ requires access to contacts for peer-to-peer file sharing and citizen services.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Nagarik+ uses Face ID / Touch ID for biometric login and secure document locker access.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Nagarik+ uses local network access for NagarikShare peer-to-peer file transfer.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_nagarikshare._tcp</string>
+	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Nagarik+ requires microphone access for video calls, voice calls, and recording video for document verification.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Nagarik+ requires permission to save scanned documents to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Nagarik+ requires access to your photo library to pick images for profile and document storage.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>UIWindowScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>flutter</string>
+					<key>UISceneDelegateClassName</key>
+					<string>FlutterSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,9 +84,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.756270018867-bf4phnevqriminunafkc28as5po5d3tm</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

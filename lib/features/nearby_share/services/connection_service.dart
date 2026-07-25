@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import '../data/models/device_model.dart';
 
@@ -44,8 +45,16 @@ class ConnectionService {
 
   Future<void> initialize() async {
     try {
-      await _methodChannel.invokeMethod<void>('initialize');
-      _listenToNativeEvents();
+      // iOS uses MultipeerConnectivity, Android uses Wi-Fi Direct/Hotspot
+      if (Platform.isIOS) {
+        await _methodChannel.invokeMethod<void>('initialize');
+        _listenToNativeEvents();
+      } else if (Platform.isAndroid) {
+        await _methodChannel.invokeMethod<void>('initialize');
+        _listenToNativeEvents();
+      } else {
+        throw Exception('Platform not supported for offline sharing');
+      }
     } on PlatformException catch (e) {
       _setState(ShareConnectionState.failed);
       throw Exception('Failed to initialize: ${e.message}');
@@ -138,7 +147,13 @@ class ConnectionService {
     _devicesCtrl.add([]);
     _setState(ShareConnectionState.searching);
     try {
-      await _methodChannel.invokeMethod<void>('discoverDevices');
+      if (Platform.isIOS) {
+        // iOS uses MultipeerConnectivity for discovery
+        await _methodChannel.invokeMethod<void>('discoverDevices');
+      } else if (Platform.isAndroid) {
+        // Android uses Wi-Fi Direct + NSD/UDP discovery
+        await _methodChannel.invokeMethod<void>('discoverDevices');
+      }
     } on PlatformException catch (e) {
       _setState(ShareConnectionState.failed);
       throw Exception('Discovery failed: ${e.message}');
@@ -157,12 +172,26 @@ class ConnectionService {
 
   Future<Map<String, dynamic>> createHotspot() async {
     try {
-      final result = await _methodChannel
-          .invokeMethod<Map<Object?, Object?>>('createHotspot');
-      final info   = result?.cast<String, dynamic>() ?? {};
-      _connectedIp = info['gatewayIp'] as String?;
-      _serverPort  = info['port'] as int? ?? 8888;
-      return info;
+      if (Platform.isIOS) {
+        // iOS doesn't support programmatic hotspot creation
+        // Return manual hotspot info for user to set up
+        final info = {
+          'ssid': 'NagarikShare',
+          'password': 'nagarik123',
+          'gatewayIp': '192.168.43.1',
+          'port': _serverPort,
+        };
+        _connectedIp = info['gatewayIp'] as String?;
+        return info;
+      } else if (Platform.isAndroid) {
+        final result = await _methodChannel
+            .invokeMethod<Map<Object?, Object?>>('createHotspot');
+        final info   = result?.cast<String, dynamic>() ?? {};
+        _connectedIp = info['gatewayIp'] as String?;
+        _serverPort  = info['port'] as int? ?? 8888;
+        return info;
+      }
+      return {};
     } on PlatformException catch (e) {
       throw Exception('Hotspot creation failed: ${e.message}');
     }
@@ -170,11 +199,18 @@ class ConnectionService {
 
   Future<bool> connectToWifi({required String ssid, required String password}) async {
     try {
-      final result = await _methodChannel.invokeMethod<bool>('connectToWifi', {
-        'ssid': ssid,
-        'password': password,
-      });
-      return result ?? false;
+      if (Platform.isIOS) {
+        // iOS doesn't support programmatic Wi-Fi connection
+        // User must manually connect to hotspot
+        return false;
+      } else if (Platform.isAndroid) {
+        final result = await _methodChannel.invokeMethod<bool>('connectToWifi', {
+          'ssid': ssid,
+          'password': password,
+        });
+        return result ?? false;
+      }
+      return false;
     } on PlatformException catch (_) {
       return false;
     }

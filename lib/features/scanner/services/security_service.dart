@@ -25,7 +25,9 @@ class SecurityService {
     if (!Platform.isAndroid) return;
     try {
       await _channel.invokeMethod('setSecureScreen', {'secure': false});
-    } on MissingPluginException {}
+    } on MissingPluginException {
+      // Plugin not available on this platform — intentionally ignored.
+    }
   }
 
   // ── Temp file cleanup ─────────────────────────────────────────────────────

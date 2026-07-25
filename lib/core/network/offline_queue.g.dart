@@ -1,4 +1,3 @@
-﻿
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'offline_queue.dart';
@@ -55,4 +54,3 @@ class QueuedRequestAdapter extends TypeAdapter<QueuedRequest> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
-

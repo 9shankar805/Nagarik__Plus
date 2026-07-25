@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/l10n/l10n_extension.dart';
-import '../models/office_model.dart';
 import '../providers/office_provider.dart';
 
 class OfficeLocatorScreen extends StatefulWidget {
@@ -185,7 +184,7 @@ class _OfficeLocatorScreenState extends State<OfficeLocatorScreen> {
                 hintStyle: const TextStyle(color: Colors.white60),
                 prefixIcon: const Icon(Icons.search_rounded, color: Colors.white60),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.15),
+                fillColor: Colors.white.withValues(alpha: 0.15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -327,7 +326,7 @@ class _OfficeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,
               offset: const Offset(0, 2))
         ],
@@ -343,7 +342,7 @@ class _OfficeCard extends StatelessWidget {
                   width: 46,
                   height: 46,
                   decoration: BoxDecoration(
-                    color: office.color.withOpacity(0.12),
+                    color: office.color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(office.icon, color: office.color, size: 24),

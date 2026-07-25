@@ -114,7 +114,7 @@ class _RoadSignsScreenState extends State<RoadSignsScreen>
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 6,
                           offset: const Offset(0, 2))
                     ],
@@ -126,7 +126,7 @@ class _RoadSignsScreenState extends State<RoadSignsScreen>
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: sign.color.withOpacity(0.12),
+                          color: sign.color.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(sign.icon, color: sign.color, size: 30),
@@ -161,7 +161,7 @@ class _RoadSignsScreenState extends State<RoadSignsScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: sign.color.withOpacity(0.12),
+                color: sign.color.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(sign.icon, color: sign.color, size: 40),

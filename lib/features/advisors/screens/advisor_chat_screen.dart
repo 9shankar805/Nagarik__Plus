@@ -242,7 +242,7 @@ class _AdvisorChatBodyState extends State<_AdvisorChatBody> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4),
+                        BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4),
                       ],
                     ),
                     child: Row(
@@ -280,7 +280,7 @@ class _AdvisorChatBodyState extends State<_AdvisorChatBody> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                     ),
                     child: Text(
                       prompt,
@@ -394,7 +394,7 @@ class _MessageBubble extends StatelessWidget {
                   bottomRight: Radius.circular(isMe ? 4 : 16),
                 ),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4, offset: const Offset(0, 2)),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -405,7 +405,7 @@ class _MessageBubble extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.only(bottom: 6),
                       decoration: BoxDecoration(
-                        color: isMe ? Colors.white.withOpacity(0.2) : const Color(0xFFF1F5F9),
+                        color: isMe ? Colors.white.withValues(alpha: 0.2) : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(

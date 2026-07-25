@@ -47,7 +47,7 @@ class AdvisorDetailScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 46,
-                        backgroundColor: advisor.category.color.withOpacity(0.15),
+                        backgroundColor: advisor.category.color.withValues(alpha: 0.15),
                         backgroundImage: NetworkImage(advisor.avatarUrl),
                       ),
                       Positioned(
@@ -105,9 +105,9 @@ class AdvisorDetailScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                     decoration: BoxDecoration(
-                      color: advisor.category.color.withOpacity(0.1),
+                      color: advisor.category.color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: advisor.category.color.withOpacity(0.3)),
+                      border: Border.all(color: advisor.category.color.withValues(alpha: 0.3)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -421,7 +421,7 @@ class AdvisorDetailScreen extends StatelessWidget {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -438,7 +438,7 @@ class AdvisorDetailScreen extends StatelessWidget {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -3),
             ),
@@ -618,7 +618,7 @@ class _PricingCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -670,7 +670,7 @@ class _PricingCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: hasActivePass ? const Color(0xFF2E7D32) : iconColor.withOpacity(0.1),
+                    color: hasActivePass ? const Color(0xFF2E7D32) : iconColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(

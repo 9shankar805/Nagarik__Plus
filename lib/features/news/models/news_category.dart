@@ -10,7 +10,7 @@ class NewsCategory {
     this.nameNp,
   });
 
-  factory NewsCategory.fromJson(Map&lt;String, dynamic&gt; json) {
+  factory NewsCategory.fromJson(Map<String, dynamic> json) {
     return NewsCategory(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -18,7 +18,7 @@ class NewsCategory {
     );
   }
 
-  Map&lt;String, dynamic&gt; toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,

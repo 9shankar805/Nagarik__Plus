@@ -195,7 +195,7 @@ class _PreparationsScreenState extends State<PreparationsScreen> {
           Positioned(
             bottom: 20,
             left: 40,
-            child: Icon(Icons.eco, size: 24, color: _kGreen.withOpacity(0.7)),
+            child: Icon(Icons.eco, size: 24, color: _kGreen.withValues(alpha: 0.7)),
           ),
 
           // ── Tablet UI (white rounded rectangle) centred-right ────────────
@@ -210,7 +210,7 @@ class _PreparationsScreenState extends State<PreparationsScreen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withValues(alpha: 0.06),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

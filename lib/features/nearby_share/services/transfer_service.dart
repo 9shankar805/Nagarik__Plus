@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import '../data/models/transfer_file_model.dart';
 import '../data/models/transfer_record_model.dart';
@@ -126,11 +125,13 @@ class TransferService {
         _filesCtrl.add(List.unmodifiable(_queue));
         _progressCtrl.add(file);
 
-        // Trigger media scanner
-        try {
-          const MethodChannel('com.nagarikplus.nagarik_plus/media_scanner')
-              .invokeMethod('scanFile', {'path': savedPath});
-        } catch (_) {}
+        // Trigger media scanner (Android only)
+        if (Platform.isAndroid) {
+          try {
+            const MethodChannel('com.nagarikplus.nagarik_plus/media_scanner')
+                .invokeMethod('scanFile', {'path': savedPath});
+          } catch (_) {}
+        }
 
         if (checksumOk) {
           await _history.add(TransferRecord(

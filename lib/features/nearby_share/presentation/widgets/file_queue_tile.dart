@@ -40,7 +40,7 @@ class FileQueueTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Text(file.category.toUpperCase(),
@@ -59,7 +59,7 @@ class FileQueueTile extends StatelessWidget {
             child: Container(
               width: 28, height: 28,
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.08),
+                color: Colors.red.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.close_rounded,
@@ -78,7 +78,7 @@ class FileQueueTile extends StatelessWidget {
         child: SizedBox(
           width: 46, height: 46,
           child: Image.file(File(file.path), fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => _iconBox(icon, color)),
+              errorBuilder: (_, _, _) => _iconBox(icon, color)),
         ),
       );
     }
@@ -88,7 +88,7 @@ class FileQueueTile extends StatelessWidget {
   Widget _iconBox(IconData icon, Color color) => Container(
     width: 46, height: 46,
     decoration: BoxDecoration(
-      color: color.withOpacity(0.1),
+      color: color.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(10),
     ),
     child: Icon(icon, color: color, size: 22),

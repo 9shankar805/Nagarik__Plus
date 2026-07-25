@@ -303,7 +303,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               ? page.originalPath
                               : page.processedPath),
                           fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) =>
+                          errorBuilder: (_, _, _) =>
                               const _BrokenImage(),
                         ),
                       ),

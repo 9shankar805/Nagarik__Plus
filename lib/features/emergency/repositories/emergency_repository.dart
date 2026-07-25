@@ -20,12 +20,12 @@ class EmergencyRepository {
   }) async {
     if (!forceRefresh &&
         _contactsBox != null &&
-        _contactsBox!.isNotEmpty &&
+        _contactsBox.isNotEmpty &&
         _hospitalsBox != null &&
-        _hospitalsBox!.isNotEmpty) {
+        _hospitalsBox.isNotEmpty) {
       return {
-        'contacts': _contactsBox!.values.toList(),
-        'hospitals': _hospitalsBox!.values.toList(),
+        'contacts': _contactsBox.values.toList(),
+        'hospitals': _hospitalsBox.values.toList(),
       };
     }
 
@@ -36,12 +36,12 @@ class EmergencyRepository {
       final hospitals = emergencyData?.hospitals ?? <Hospital>[];
 
       if (_contactsBox != null) {
-        await _contactsBox!.clear();
-        await _contactsBox!.addAll(contacts);
+        await _contactsBox.clear();
+        await _contactsBox.addAll(contacts);
       }
       if (_hospitalsBox != null) {
-        await _hospitalsBox!.clear();
-        await _hospitalsBox!.addAll(hospitals);
+        await _hospitalsBox.clear();
+        await _hospitalsBox.addAll(hospitals);
       }
 
       return {
@@ -50,12 +50,12 @@ class EmergencyRepository {
       };
     } catch (e) {
       if (_contactsBox != null &&
-          _contactsBox!.isNotEmpty &&
+          _contactsBox.isNotEmpty &&
           _hospitalsBox != null &&
-          _hospitalsBox!.isNotEmpty) {
+          _hospitalsBox.isNotEmpty) {
         return {
-          'contacts': _contactsBox!.values.toList(),
-          'hospitals': _hospitalsBox!.values.toList(),
+          'contacts': _contactsBox.values.toList(),
+          'hospitals': _hospitalsBox.values.toList(),
         };
       }
       rethrow;

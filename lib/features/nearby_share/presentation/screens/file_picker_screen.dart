@@ -26,12 +26,10 @@ class _FilePickerScreenState extends State<FilePickerScreen>
 
   late TabController _tabs;
   final Set<String>  _selectedIds  = {};  // asset IDs or file paths
-  final Map<String, String> _idToPath = {}; // asset id → resolved path
 
   bool _loading = true;
 
   // media (photos/videos)
-  List<AssetPathEntity> _albums    = [];
   AssetPathEntity?       _curAlbum;
   List<AssetEntity>      _assets   = [];
 
@@ -106,7 +104,6 @@ class _FilePickerScreenState extends State<FilePickerScreen>
     if (!res.hasAccess) return;
     final albums = await PhotoManager.getAssetPathList(type: type);
     if (albums.isEmpty) return;
-    _albums   = albums;
     _curAlbum = albums.first;
     final cnt  = await _curAlbum!.assetCountAsync;
     _assets    = await _curAlbum!.getAssetListRange(start: 0, end: cnt);
@@ -280,7 +277,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
                   ? Image.memory(snap.data!, fit: BoxFit.cover)
                   : Container(color: const Color(0xFFEDF3FF)),
             ),
-            if (sel) Container(color: _kBlue.withOpacity(0.3)),
+            if (sel) Container(color: _kBlue.withValues(alpha: 0.3)),
             Positioned(top: 6, right: 6,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
@@ -327,7 +324,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: sel ? tab.color.withOpacity(0.07) : _kWhite,
+              color: sel ? tab.color.withValues(alpha: 0.07) : _kWhite,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: sel ? tab.color : _kBord, width: sel ? 1.5 : 1),
@@ -336,7 +333,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
               Container(
                 width: 46, height: 46,
                 decoration: BoxDecoration(
-                    color: tab.color.withOpacity(0.12),
+                    color: tab.color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12)),
                 child: app?.icon != null && app!.icon!.isNotEmpty
                     ? ClipRRect(
@@ -354,7 +351,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: tab.color.withOpacity(0.12),
+                      color: tab.color.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(ext, style: TextStyle(
@@ -399,13 +396,13 @@ class _FilePickerScreenState extends State<FilePickerScreen>
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: sel ? tab.color.withOpacity(0.07) : _kWhite,
+              color: sel ? tab.color.withValues(alpha: 0.07) : _kWhite,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: sel ? tab.color : _kBord),
             ),
             child: Row(children: [
               CircleAvatar(
-                backgroundColor: tab.color.withOpacity(0.12),
+                backgroundColor: tab.color.withValues(alpha: 0.12),
                 radius: 22,
                 child: Text(c.displayName.isNotEmpty ? c.displayName[0] : '?',
                     style: TextStyle(color: tab.color,
@@ -445,7 +442,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
       Container(
         width: 72, height: 72,
         decoration: BoxDecoration(
-            color: tab.color.withOpacity(0.1), shape: BoxShape.circle),
+            color: tab.color.withValues(alpha: 0.1), shape: BoxShape.circle),
         child: Icon(tab.icon, color: tab.color, size: 36),
       ),
       const SizedBox(height: 14),
@@ -471,7 +468,7 @@ class _FilePickerScreenState extends State<FilePickerScreen>
           Container(
             width: 42, height: 42,
             decoration: BoxDecoration(
-              color: _kBlue.withOpacity(0.1),
+              color: _kBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12)),
             child: Center(child: Text('${_selectedIds.length}',
                 style: const TextStyle(color: _kBlue,

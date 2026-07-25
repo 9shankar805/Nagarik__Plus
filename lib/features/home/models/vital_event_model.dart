@@ -14,7 +14,7 @@ class VitalEventModel {
     this.bgColor,
   });
 
-  factory VitalEventModel.fromJson(Map&lt;String, dynamic&gt; json) {
+  factory VitalEventModel.fromJson(Map<String, dynamic> json) {
     return VitalEventModel(
       id: json['id'],
       title: json['title'],

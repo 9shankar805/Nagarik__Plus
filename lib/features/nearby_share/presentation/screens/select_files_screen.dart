@@ -360,8 +360,11 @@ class _ContactsTabState extends State<_ContactsTab> {
           subtitle: c.phones.isNotEmpty ? Text(c.phones.first.number, style: const TextStyle(fontSize: 12)) : null,
           trailing: _CircleCheck(selected: sel),
           onTap: () {
-            if (sel) widget.selected.remove(c.id);
-            else widget.selected.add(c.id);
+            if (sel) {
+              widget.selected.remove(c.id);
+            } else {
+              widget.selected.add(c.id);
+            }
             widget.onChanged();
           },
         );
@@ -436,10 +439,12 @@ class _FilesTabState extends State<_FilesTab> {
         if (parts.length >= 4) {
           final total = double.tryParse(parts[1]) ?? 0;
           final used  = double.tryParse(parts[2]) ?? 0;
-          if (mounted) setState(() {
+          if (mounted) {
+            setState(() {
             _totalGb = total / (1024 * 1024);
             _usedGb  = used  / (1024 * 1024);
           });
+          }
         }
       }
     } catch (_) {}
@@ -628,7 +633,7 @@ class _FilesTabState extends State<_FilesTab> {
           Container(
             width: 42, height: 42,
             decoration: BoxDecoration(
-                color: iconBgColor ?? iconColor.withOpacity(0.12),
+                color: iconBgColor ?? iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10)),
             child: Icon(icon, color: iconColor, size: 24)),
           const SizedBox(width: 14),
@@ -765,10 +770,15 @@ class _VideosTabState extends State<_VideosTab> {
       final dt = v.createDateTime;
       final diff = now.difference(dt).inDays;
       String label;
-      if (diff == 0) label = 'Today';
-      else if (diff == 1) label = 'Yesterday';
-      else if (diff == 2) label = 'The day before yesterday';
-      else label = '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
+      if (diff == 0) {
+        label = 'Today';
+      } else if (diff == 1) {
+        label = 'Yesterday';
+      } else if (diff == 2) {
+        label = 'The day before yesterday';
+      } else {
+        label = '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
+      }
       (groups[label] ??= []).add(v);
     }
     return groups;
@@ -834,8 +844,11 @@ class _VideosTabState extends State<_VideosTab> {
                 final ss = dur.inSeconds.remainder(60).toString().padLeft(2, '0');
                 return GestureDetector(
                   onTap: () {
-                    if (sel) widget.selected.remove(asset.id);
-                    else widget.selected.add(asset.id);
+                    if (sel) {
+                      widget.selected.remove(asset.id);
+                    } else {
+                      widget.selected.add(asset.id);
+                    }
                     widget.onChanged();
                   },
                   child: Stack(children: [
@@ -1063,8 +1076,11 @@ class _AppsTabState extends State<_AppsTab> {
         final sel = widget.selected.contains(app.packageName);
         return GestureDetector(
           onTap: () {
-            if (sel) widget.selected.remove(app.packageName);
-            else widget.selected.add(app.packageName);
+            if (sel) {
+              widget.selected.remove(app.packageName);
+            } else {
+              widget.selected.add(app.packageName);
+            }
             widget.onChanged();
           },
           child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -1185,8 +1201,10 @@ class _PhotosTabState extends State<_PhotosTab> {
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_photos.isEmpty) return const Center(child: Text('No photos',
+    if (_photos.isEmpty) {
+      return const Center(child: Text('No photos',
         style: TextStyle(color: Color(0xFF757575))));
+    }
     // +1 for the loading footer row when more items exist
     final itemCount = _photos.length + (_hasMore ? 1 : 0);
     return GridView.builder(
@@ -1210,8 +1228,11 @@ class _PhotosTabState extends State<_PhotosTab> {
         final num = widget.selected.toList().indexOf(asset.id) + 1;
         return GestureDetector(
           onTap: () {
-            if (sel) widget.selected.remove(asset.id);
-            else widget.selected.add(asset.id);
+            if (sel) {
+              widget.selected.remove(asset.id);
+            } else {
+              widget.selected.add(asset.id);
+            }
             widget.onChanged();
           },
           child: Stack(fit: StackFit.expand, children: [
@@ -1221,7 +1242,7 @@ class _PhotosTabState extends State<_PhotosTab> {
                   ? Image.memory(s.data!, fit: BoxFit.cover)
                   : Container(color: const Color(0xFFEEEEEE)),
             ),
-            if (sel) Container(color: const Color(0xFF2196F3).withOpacity(0.3)),
+            if (sel) Container(color: const Color(0xFF2196F3).withValues(alpha: 0.3)),
             Positioned(top: 6, right: 6,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
@@ -1323,8 +1344,10 @@ class _MusicTabState extends State<_MusicTab> {
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_tracks.isEmpty) return const Center(child: Text('No music files found',
+    if (_tracks.isEmpty) {
+      return const Center(child: Text('No music files found',
         style: TextStyle(color: Color(0xFF757575))));
+    }
     return ListView.builder(
       controller: _scroll,
       padding: const EdgeInsets.all(12),
@@ -1346,7 +1369,7 @@ class _MusicTabState extends State<_MusicTab> {
           leading: Container(
             width: 44, height: 44,
             decoration: BoxDecoration(
-                color: const Color(0xFF7E57C2).withOpacity(0.15),
+                color: const Color(0xFF7E57C2).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10)),
             child: const Icon(Icons.music_note_rounded, color: Color(0xFF7E57C2))),
           title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
@@ -1355,8 +1378,11 @@ class _MusicTabState extends State<_MusicTab> {
               style: const TextStyle(fontSize: 11, color: Color(0xFF757575))),
           trailing: _CircleCheck(selected: sel),
           onTap: () {
-            if (sel) widget.selected.remove(asset.id);
-            else widget.selected.add(asset.id);
+            if (sel) {
+              widget.selected.remove(asset.id);
+            } else {
+              widget.selected.add(asset.id);
+            }
             widget.onChanged();
           },
         );
@@ -1385,7 +1411,7 @@ class _Seg extends StatelessWidget {
             color: active ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
             boxShadow: active
-                ? [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4)]
+                ? [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 4)]
                 : null),
           child: Center(child: Text(label,
               style: TextStyle(
@@ -1422,7 +1448,7 @@ class _NoFileIllustration extends StatelessWidget {
       child: Stack(alignment: Alignment.center, children: [
         Positioned(left: 20, bottom: 0,
           child: Container(width: 50, height: 60,
-              decoration: BoxDecoration(color: const Color(0xFF2196F3).withOpacity(0.7),
+              decoration: BoxDecoration(color: const Color(0xFF2196F3).withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(6)))),
         Container(
           width: 90, height: 120,
@@ -1485,7 +1511,7 @@ class _ContactsIllustration extends StatelessWidget {
             Container(
               width: 36, height: 36,
               decoration: BoxDecoration(
-                  color: const Color(0xFF2196F3).withOpacity(0.1), shape: BoxShape.circle),
+                  color: const Color(0xFF2196F3).withValues(alpha: 0.1), shape: BoxShape.circle),
               child: const Icon(Icons.person_rounded, color: Color(0xFF2196F3), size: 22)),
             const SizedBox(height: 8),
             const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
@@ -1713,8 +1739,11 @@ class _FileListScreenState extends State<_FileListScreen> {
 
                     return GestureDetector(
                       onTap: () {
-                        if (sel) widget.selected.remove(f.path);
-                        else     widget.selected.add(f.path);
+                        if (sel) {
+                          widget.selected.remove(f.path);
+                        } else {
+                          widget.selected.add(f.path);
+                        }
                         widget.onChanged();
                         setState(() {});
                       },
@@ -1722,16 +1751,16 @@ class _FileListScreenState extends State<_FileListScreen> {
                         margin: const EdgeInsets.only(bottom: 8),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: sel ? _kBlue.withOpacity(0.06) : Colors.white,
+                          color: sel ? _kBlue.withValues(alpha: 0.06) : Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: sel ? _kBlue.withOpacity(0.3) : const Color(0xFFEEEEEE)),
+                              color: sel ? _kBlue.withValues(alpha: 0.3) : const Color(0xFFEEEEEE)),
                         ),
                         child: Row(children: [
                           Container(
                             width: 46, height: 46,
                             decoration: BoxDecoration(
-                              color: _kBlue.withOpacity(0.1),
+                              color: _kBlue.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10)),
                             child: Center(child: Text(
                               ext.length > 4 ? ext.substring(0, 4) : ext,

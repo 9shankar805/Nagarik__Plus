@@ -73,7 +73,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
                 child: Image.file(
                   File(widget.pdfPath),
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => const _ErrorView(),
+                  errorBuilder: (_, _, _) => const _ErrorView(),
                 ),
               ),
             )

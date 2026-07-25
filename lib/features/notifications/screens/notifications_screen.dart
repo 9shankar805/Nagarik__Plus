@@ -14,16 +14,13 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
-      setState(() {
-        _selectedTab = _tabController.index;
-      });
+      setState(() {});
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NotificationProvider>().loadNotifications();
@@ -86,7 +83,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           const Spacer(),
           Container(
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.08),
+              color: AppColors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
@@ -119,7 +116,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -215,12 +212,12 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           border: notification.isRead
               ? null
               : Border.all(
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                   width: 1.5,
                 ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -244,7 +241,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: notification.color.withOpacity(0.12),
+                      color: notification.color.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -320,7 +317,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: notification.color.withOpacity(0.1),
+                                  color: notification.color.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -419,13 +416,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
+                color: AppColors.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: 40,
-                color: AppColors.primary.withOpacity(0.5),
+                color: AppColors.primary.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 20),
@@ -546,7 +543,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: AppColors.primary, size: 20),
@@ -575,7 +572,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           ),
           Switch(
             value: value,
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
             onChanged: (v) {},
           ),
         ],

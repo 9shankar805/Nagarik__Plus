@@ -18,29 +18,29 @@ class NotificationRepository {
         _preferencesBox = preferencesBox;
 
   Future<List<NotificationItem>> getNotifications({bool forceRefresh = false}) async {
-    if (!forceRefresh && _notificationsBox != null && _notificationsBox!.isNotEmpty) {
-      return _notificationsBox!.values.toList();
+    if (!forceRefresh && _notificationsBox != null && _notificationsBox.isNotEmpty) {
+      return _notificationsBox.values.toList();
     }
 
     try {
       final response = await _apiService.getNotifications();
       final notifications = response.data ?? [];
       if (_notificationsBox != null) {
-        await _notificationsBox!.clear();
-        await _notificationsBox!.addAll(notifications);
+        await _notificationsBox.clear();
+        await _notificationsBox.addAll(notifications);
       }
       return notifications;
     } catch (e) {
-      if (_notificationsBox != null && _notificationsBox!.isNotEmpty) {
-        return _notificationsBox!.values.toList();
+      if (_notificationsBox != null && _notificationsBox.isNotEmpty) {
+        return _notificationsBox.values.toList();
       }
       rethrow;
     }
   }
 
   Future<NotificationPreferences> getPreferences({bool forceRefresh = false}) async {
-    if (!forceRefresh && _preferencesBox != null && _preferencesBox!.isNotEmpty) {
-      return _preferencesBox!.values.first;
+    if (!forceRefresh && _preferencesBox != null && _preferencesBox.isNotEmpty) {
+      return _preferencesBox.values.first;
     }
 
     try {
@@ -53,13 +53,13 @@ class NotificationRepository {
         ai: true,
       );
       if (_preferencesBox != null) {
-        await _preferencesBox!.clear();
-        await _preferencesBox!.add(preferences);
+        await _preferencesBox.clear();
+        await _preferencesBox.add(preferences);
       }
       return preferences;
     } catch (e) {
-      if (_preferencesBox != null && _preferencesBox!.isNotEmpty) {
-        return _preferencesBox!.values.first;
+      if (_preferencesBox != null && _preferencesBox.isNotEmpty) {
+        return _preferencesBox.values.first;
       }
       rethrow;
     }
@@ -72,8 +72,8 @@ class NotificationRepository {
       final response = await _apiService.updatePreferences(preferences);
       final updatedPreferences = response.data ?? preferences;
       if (_preferencesBox != null) {
-        await _preferencesBox!.clear();
-        await _preferencesBox!.add(updatedPreferences);
+        await _preferencesBox.clear();
+        await _preferencesBox.add(updatedPreferences);
       }
       return updatedPreferences;
     } catch (e) {

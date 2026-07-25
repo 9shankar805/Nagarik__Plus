@@ -11,21 +11,21 @@ class HomeProvider extends ChangeNotifier {
   final HomeRepository _repository;
 
   HomeStatus _status = HomeStatus.initial;
-  List&lt;BannerModel&gt; _banners = [];
-  List&lt;SocialServiceModel&gt; _socialServices = [];
-  List&lt;VitalEventModel&gt; _vitalEvents = [];
+  List<BannerModel> _banners = [];
+  List<SocialServiceModel> _socialServices = [];
+  List<VitalEventModel> _vitalEvents = [];
   String? _errorMessage;
 
-  HomeStatus get status =&gt; _status;
-  List&lt;BannerModel&gt; get banners =&gt; _banners;
-  List&lt;SocialServiceModel&gt; get socialServices =&gt; _socialServices;
-  List&lt;VitalEventModel&gt; get vitalEvents =&gt; _vitalEvents;
-  String? get errorMessage =&gt; _errorMessage;
+  HomeStatus get status => _status;
+  List<BannerModel> get banners => _banners;
+  List<SocialServiceModel> get socialServices => _socialServices;
+  List<VitalEventModel> get vitalEvents => _vitalEvents;
+  String? get errorMessage => _errorMessage;
 
   HomeProvider({HomeRepository? repository})
       : _repository = repository ?? HomeRepository();
 
-  Future&lt;void&gt; loadHomeData({bool forceRefresh = false}) async {
+  Future<void> loadHomeData({bool forceRefresh = false}) async {
     _status = HomeStatus.loading;
     _errorMessage = null;
     notifyListeners();

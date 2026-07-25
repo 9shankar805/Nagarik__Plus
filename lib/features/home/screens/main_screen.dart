@@ -102,7 +102,7 @@ class _NavBar extends StatelessWidget {
       padding: EdgeInsets.only(
         left: 16,
         right: 16,
-        bottom: bottomPad + 12,
+        bottom: bottomPad > 0 ? bottomPad - 16 : 0,
         top: 0,
       ),
       child: Stack(
@@ -117,13 +117,13 @@ class _NavBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(36),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.10),
+                  color: Colors.black.withValues(alpha: 0.10),
                   blurRadius: 24,
                   spreadRadius: 0,
                   offset: const Offset(0, 6),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),
@@ -181,7 +181,7 @@ class _NavBar extends StatelessWidget {
 
           // ── Raised scan button — sits above the pill ────────────
           Positioned(
-            top: -28, // pops above the pill
+            top: -32, // pops above the pill
             child: _ScanButton(onTap: onScanTap),
           ),
         ],
@@ -294,7 +294,7 @@ class _ScanButton extends StatelessWidget {
                 color: const Color(0xFFF2F4F8), // matches outer bg — acts as halo
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.28),
+                    color: AppColors.primary.withValues(alpha: 0.28),
                     blurRadius: 18,
                     spreadRadius: 2,
                     offset: const Offset(0, 4),

@@ -110,7 +110,7 @@ class NewsApiService {
   Future<ApiResponse<NewsComment>> addComment(int newsId, String content, {int? parentId}) async {
     return await _apiClient.post(
       '/news/$newsId/comments',
-      data: {'content': content, if (parentId != null) 'parent_id': parentId},
+      data: {'content': content, 'parent_id': ?parentId},
       fromJsonT: (json) {
         final data = json is Map && json['data'] != null
             ? (json['data']['comment'] ?? json['data'])
@@ -123,7 +123,6 @@ class NewsApiService {
   Future<ApiResponse<void>> deleteComment(int commentId) async {
     return await _apiClient.delete(
       '/news/comments/$commentId',
-      fromJsonT: (_) => null,
     );
   }
 

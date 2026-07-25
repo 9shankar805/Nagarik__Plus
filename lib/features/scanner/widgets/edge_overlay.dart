@@ -46,7 +46,7 @@ class _EdgeOverlayState extends State<EdgeOverlay>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _pulse,
-      builder: (_, __) => CustomPaint(
+      builder: (_, _) => CustomPaint(
         painter: _EdgePainter(
           corners:           widget.corners,
           detected:          widget.detected,
@@ -91,7 +91,7 @@ class _EdgePainter extends CustomPainter {
 
     canvas.drawPath(
       Path.combine(PathOperation.difference, outerPath, innerPath),
-      Paint()..color = Colors.black.withOpacity(0.52),
+      Paint()..color = Colors.black.withValues(alpha: 0.52),
     );
 
     // Border

@@ -12,21 +12,21 @@ class DocumentRepository {
         _box = box;
 
   Future<List<DocumentModel>> getDocuments({bool forceRefresh = false}) async {
-    if (_box != null && !forceRefresh && _box!.isNotEmpty) {
-      return _box!.values.toList();
+    if (_box != null && !forceRefresh && _box.isNotEmpty) {
+      return _box.values.toList();
     }
 
     try {
       final response = await _apiService.getDocuments();
       final docs = response.data ?? [];
       if (_box != null) {
-        await _box!.clear();
-        await _box!.addAll(docs);
+        await _box.clear();
+        await _box.addAll(docs);
       }
       return docs;
     } catch (e) {
-      if (_box != null && _box!.isNotEmpty) {
-        return _box!.values.toList();
+      if (_box != null && _box.isNotEmpty) {
+        return _box.values.toList();
       }
       rethrow;
     }
@@ -54,7 +54,7 @@ class DocumentRepository {
     try {
       final response = await _apiService.createDocument(data);
       if (_box != null && response.data != null) {
-        await _box!.add(response.data!);
+        await _box.add(response.data!);
       }
       return response.data!;
     } catch (e) {
@@ -72,7 +72,7 @@ class DocumentRepository {
         onSendProgress: onSendProgress,
       );
       if (_box != null && response.data != null) {
-        await _box!.add(response.data!);
+        await _box.add(response.data!);
       }
       return response.data!;
     } catch (e) {
@@ -87,9 +87,9 @@ class DocumentRepository {
     try {
       final response = await _apiService.updateDocument(id, data);
       if (_box != null && response.data != null) {
-        final index = _box!.values.toList().indexWhere((d) => d.id == id.toString());
+        final index = _box.values.toList().indexWhere((d) => d.id == id.toString());
         if (index != -1) {
-          await _box!.putAt(index, response.data!);
+          await _box.putAt(index, response.data!);
         }
       }
       return response.data!;
@@ -102,9 +102,9 @@ class DocumentRepository {
     try {
       await _apiService.deleteDocument(id);
       if (_box != null) {
-        final index = _box!.values.toList().indexWhere((d) => d.id == id.toString());
+        final index = _box.values.toList().indexWhere((d) => d.id == id.toString());
         if (index != -1) {
-          await _box!.deleteAt(index);
+          await _box.deleteAt(index);
         }
       }
     } catch (e) {

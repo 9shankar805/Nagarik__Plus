@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../models/news_article.dart';
+import '../models/news_category.dart';
 import '../providers/news_provider.dart';
 import 'news_detail_screen.dart';
 
@@ -22,7 +23,6 @@ class _NewsScreenState extends State<NewsScreen>
   late TabController _tabController;
   int _selectedCategory = 0;
   bool _isSearching = false;
-  String _searchQuery = '';
   final TextEditingController _searchCtrl = TextEditingController();
   Timer? _debounceTimer;
 
@@ -250,28 +250,6 @@ class _NewsScreenState extends State<NewsScreen>
     super.dispose();
   }
 
-  List<NewsFeedPost> get _filteredPosts {
-    final isNepali = Localizations.localeOf(context).languageCode == 'ne';
-    List<NewsFeedPost> list = _posts;
-
-    if (_selectedCategory > 0) {
-      final targetCat = isNepali ? _categoriesNe[_selectedCategory] : _categoriesEn[_selectedCategory];
-      list = list.where((p) => (isNepali ? p.categoryNe : p.categoryEn) == targetCat).toList();
-    }
-
-    if (_searchQuery.trim().isNotEmpty) {
-      final q = _searchQuery.toLowerCase();
-      list = list.where((p) {
-        final title = (isNepali ? p.titleNe : p.titleEn).toLowerCase();
-        final content = (isNepali ? p.contentNe : p.contentEn).toLowerCase();
-        final source = (isNepali ? p.sourceNe : p.sourceEn).toLowerCase();
-        return title.contains(q) || content.contains(q) || source.contains(q);
-      }).toList();
-    }
-
-    return list;
-  }
-
   void _showNewsMenuSheet(BuildContext context, bool isNepali) {
     showModalBottomSheet(
       context: context,
@@ -394,7 +372,6 @@ class _NewsScreenState extends State<NewsScreen>
                   border: InputBorder.none,
                 ),
                 onChanged: (val) {
-                  setState(() => _searchQuery = val);
                   if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
                   _debounceTimer = Timer(const Duration(milliseconds: 300), () {
                     if (mounted) {
@@ -474,7 +451,6 @@ class _NewsScreenState extends State<NewsScreen>
               setState(() {
                 if (_isSearching) {
                   _isSearching = false;
-                  _searchQuery = '';
                   _searchCtrl.clear();
                 } else {
                   _isSearching = true;
@@ -726,7 +702,7 @@ class _NewsScreenState extends State<NewsScreen>
   // ── Facebook Shorts / Stories Horizontal Tray ──────────────────────────────
   Widget _buildShortsStoriesTray(bool isNepali, NewsProvider provider) {
     final featured = provider.featuredArticles;
-    final displayShorts = featured.isNotEmpty
+    final _ = featured.isNotEmpty
         ? featured.map((a) => _ShortItem(
               id: a.id.toString(),
               titleEn: a.title,
@@ -1440,7 +1416,7 @@ class _FacebookPostCard extends StatelessWidget {
                 child: Image.asset(
                   post.imageAsset!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     color: post.iconColor.withValues(alpha: 0.1),
                     child: Center(
                       child: Icon(post.icon, size: 64, color: post.iconColor),
@@ -1667,7 +1643,7 @@ class _FullScreenShortViewState extends State<_FullScreenShortView>
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
-              errorBuilder: (_, __, ___) => _buildGradientFallback(),
+              errorBuilder: (_, _, _) => _buildGradientFallback(),
             )
           else
             _buildGradientFallback(),

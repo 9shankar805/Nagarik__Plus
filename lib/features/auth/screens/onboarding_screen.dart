@@ -87,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 color: _pages[_currentPage].color,
               ),
             ),
@@ -114,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _pageController,
             itemCount: _pages.length,
             onPageChanged: (i) => setState(() => _currentPage = i),
-            itemBuilder: (_, __) => const SizedBox.expand(),
+            itemBuilder: (_, _) => const SizedBox.expand(),
           ),
 
           // ── Content (on top — absorbs pointer so buttons work) ────────────

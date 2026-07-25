@@ -97,6 +97,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final localeProvider = context.watch<LocaleProvider>();
     final profileProvider = context.watch<ProfileProvider>();
+    final authProvider = context.watch<AuthProvider>();
+    final User? user = profileProvider.user ?? authProvider.user;
     final isNepali = localeProvider.locale.languageCode == 'ne';
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -108,8 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: const Color(0xFFF2F5FA),
       body: CustomScrollView(
         slivers: [
-          _buildSliverHeader(context, profileProvider),
-          SliverToBoxAdapter(child: _buildStats(context, profileProvider)),
+          _buildSliverHeader(context, user),
+          SliverToBoxAdapter(child: _buildStats(context, user)),
           SliverToBoxAdapter(child: _buildQuickAccess(context)),
           SliverToBoxAdapter(child: _buildSection(
             context.l10n.accountSection,
@@ -220,19 +222,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // ── Sliver header ──────────────────────────────────────────────────────────
-  Widget _buildSliverHeader(BuildContext context, ProfileProvider profileProvider) {
+  Widget _buildSliverHeader(BuildContext context, User? user) {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _ProfileHeaderDelegate(
         onSettings: () {},
-        user: profileProvider.user,
+        user: user,
       ),
     );
   }
 
   // ── Stats card ─────────────────────────────────────────────────────────────
-  Widget _buildStats(BuildContext context, ProfileProvider profileProvider) {
-    final user = profileProvider.user;
+  Widget _buildStats(BuildContext context, User? user) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Container(
@@ -242,27 +243,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.07),
+                color: Colors.black.withValues(alpha: 0.07),
                 blurRadius: 16,
                 offset: const Offset(0, 4)),
           ],
         ),
         child: Row(
           children: [
-            _StatCell(user?.documentCount?.toString() ?? '0', context.l10n.documentsVault, AppColors.primary),
+            _statCell(user?.documentCount?.toString() ?? '0', context.l10n.documentsVault, AppColors.primary),
             _vDivider(),
-            _StatCell(user?.reminderCount?.toString() ?? '0', context.l10n.remindersCount, const Color(0xFFF9A825)),
+            _statCell(user?.reminderCount?.toString() ?? '0', context.l10n.remindersCount, const Color(0xFFF9A825)),
             _vDivider(),
-            _StatCell('12', context.l10n.securityStatus, AppColors.secondary),
+            _statCell('12', context.l10n.securityStatus, AppColors.secondary),
             _vDivider(),
-            _StatCell('5', context.l10n.services, AppColors.info),
+            _statCell('5', context.l10n.services, AppColors.info),
           ],
         ),
       ),
     );
   }
 
-  Widget _StatCell(String val, String label, Color color) {
+  Widget _statCell(String val, String label, Color color) {
     return Expanded(
       child: Column(children: [
         Text(val,
@@ -359,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2)),
             ],
@@ -433,7 +434,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       scale: 0.85,
       child: Switch(
         value: val,
-        activeColor: AppColors.primary,
+        activeThumbColor: AppColors.primary,
         onChanged: onChanged,
       ),
     );
@@ -465,7 +466,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2)),
               ],
@@ -543,9 +544,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.info.withOpacity(0.07),
+          color: AppColors.info.withValues(alpha: 0.07),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.info.withOpacity(0.15)),
+          border: Border.all(color: AppColors.info.withValues(alpha: 0.15)),
         ),
         child: const Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,9 +576,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: AppColors.danger.withOpacity(0.07),
+            color: AppColors.danger.withValues(alpha: 0.07),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.danger.withOpacity(0.25)),
+            border: Border.all(color: AppColors.danger.withValues(alpha: 0.25)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -681,7 +682,7 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
                           border: Border.all(color: Colors.white, width: 2.5),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
+                                color: Colors.black.withValues(alpha: 0.3),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4)),
                           ],
@@ -722,7 +723,7 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
                     ],
                   ),
                   const SizedBox(width: 14),
-                  // Name / email / verified
+                  // Name / email / verified / provider
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -735,7 +736,7 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
                                 fontWeight: FontWeight.w800,
                                 shadows: [
                                   Shadow(
-                                      color: Colors.black.withOpacity(0.6),
+                                      color: Colors.black.withValues(alpha: 0.6),
                                       blurRadius: 8),
                                 ])),
                         const SizedBox(height: 6),
@@ -743,10 +744,10 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.25),
+                            color: Colors.black.withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                                color: Colors.white.withOpacity(0.25)),
+                                color: Colors.white.withValues(alpha: 0.25)),
                           ),
                           child: Text(user?.email ?? '',
                               style: TextStyle(
@@ -755,28 +756,37 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
                                   fontWeight: FontWeight.w500)),
                         ),
                         const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: Colors.white.withOpacity(0.4)),
-                          ),
-                          child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.verified_rounded,
-                                    color: Colors.white, size: 13),
-                                const SizedBox(width: 4),
-                                Text(context.l10n.verifiedCitizen,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11.5,
-                                        fontWeight: FontWeight.w700)),
-                              ]),
-                        ),
+                        Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: Colors.white.withValues(alpha: 0.4)),
+                                ),
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.verified_rounded,
+                                          color: Colors.white, size: 13),
+                                      const SizedBox(width: 4),
+                                      Text(context.l10n.verifiedCitizen,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 11.5,
+                                              fontWeight: FontWeight.w700)),
+                                    ]),
+                              ),
+                              if (user?.loginProvider == 'google' ||
+                                  user?.loginProvider == 'apple') ...[
+                                const SizedBox(width: 6),
+                                _buildProviderBadge(user!.loginProvider!),
+                              ],
+                            ]),
                       ],
                     ),
                   ),
@@ -786,6 +796,44 @@ class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildProviderBadge(String provider) {
+    final bool isGoogle = provider == 'google';
+    final Color bg = isGoogle ? Colors.white : const Color(0xFF000000);
+    final Color fg = isGoogle ? const Color(0xFF1A73E8) : Colors.white;
+    final String label = isGoogle ? 'Google' : 'Apple';
+    final IconData icon = isGoogle ? Icons.g_mobiledata_rounded : Icons.apple;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: fg, size: 13),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: fg,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
